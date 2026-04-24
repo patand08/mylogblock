@@ -1,7 +1,7 @@
 import "@/components/editor/editor-theme.css";
 import PageContentSkeleton from "@/components/page/PageContentSkeleton";
 import ThemeToggle from "@/components/ui/ThemeToggle";
-import { buildPageTree, PageTreeNode } from "@/lib/page-utils";
+import { buildPageTree, getPageBreadcrumbs, PageTreeNode } from "@/lib/page-utils";
 import { fetchPages } from "@/lib/pageRepo";
 import { sanitizeBlocks } from "@/lib/sanitizeBlocks";
 import { Page } from "@/types";
@@ -20,6 +20,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Twemoji from "@/components/ui/Twemoji";
 import { TWEMOJI_SVG_OPTIONS } from "@/components/ui/Twemoji";
+import Breadcrumb from "@/components/page/Breadcrumb";
 
 const PAGE_TRANSITION_MS = 320;
 
@@ -150,7 +151,7 @@ function ReadOnlyEditor({ body }: { body: unknown }) {
 export default function ReadOnlyPage() {
   const { pageId } = useParams<{ pageId: string }>();
   const navigate = useNavigate();
-  const [, setAllPages] = useState<Page[]>([]);
+  const [allPages, setAllPages] = useState<Page[]>([]);
   const [activePage, setActivePage] = useState<Page | null>(null);
   const [tree, setTree] = useState<PageTreeNode[]>([]);
   const [loading, setLoading] = useState(true);
@@ -266,6 +267,8 @@ export default function ReadOnlyPage() {
     </aside>
   );
 
+  const readOnlyCrumbs = activePage ? getPageBreadcrumbs(allPages, activePage.id) : [];
+
   return (
     <div className="flex flex-col h-screen bg-lb-base overflow-hidden sm:flex-row">
       {/* Mobile header with hamburger button */}
@@ -350,7 +353,7 @@ export default function ReadOnlyPage() {
       <main className="flex-1 overflow-hidden">
         {activePage && isPageTransitioning ? (
           <PageContentSkeleton />
-        ) : activePage && (
+        ) : activePage ? (
           <div className="flex flex-col h-full overflow-y-auto">
             {/* Cover */}
             {activePage.cover_image_url && (
@@ -371,6 +374,11 @@ export default function ReadOnlyPage() {
                 activePage.cover_image_url ? "py-6 sm:py-8" : "pt-12 sm:pt-20 pb-6 sm:pb-8",
               )}
             >
+              {readOnlyCrumbs.length > 0 && (
+                <div className="mb-4" data-testid="read-only-breadcrumb">
+                  <Breadcrumb crumbs={readOnlyCrumbs} onNavigate={handleSelect} />
+                </div>
+              )}
               <div className="flex items-center gap-3 mb-6">
                 {activePage.icon && (
                   <Twemoji text={activePage.icon} className="text-4xl leading-none" />
@@ -382,7 +390,7 @@ export default function ReadOnlyPage() {
               <ReadOnlyEditor key={activePage.id} body={activePage.body} />
             </div>
           </div>
-        )}
+        ) : null}
       </main>
     </div>
   );
