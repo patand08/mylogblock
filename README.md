@@ -15,6 +15,7 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 ## Features
 
 ### Editor
+
 - **Block editor** powered by BlockNote — slash command menu (`/`) for inserting any block type
 - **Block types** — paragraph, heading (h1–h3), bulleted/numbered/to-do lists, code block, callout, divider, image, audio, video, file, table, and custom HTML embed
 - **Rich inline text** — bold, italic, underline, strikethrough, inline code, links
@@ -22,6 +23,7 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 - **Drag handles** — reorder blocks within a page
 
 ### Pages
+
 - **Infinite nesting** — pages can have sub-pages and sub-sub-pages
 - **Drag-and-drop reorder** — sidebar tree reordering via dnd-kit
 - **Page icons** — emoji picker per page (header + sidebar)
@@ -31,23 +33,27 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 - **Inline rename** — click-to-edit page titles in the sidebar
 
 ### Sharing & Read-Only Mode
+
 - **Public read-only view** — any page subtree accessible via `/page/:id` without authentication
 - **Custom slug URLs** — assign a short slug to any page, accessible at `/s/:slug`
 - **Read-only editor** — full block rendering with no edit interactions, same dark/light theme
 
 ### UI & UX
+
 - **Dark / light theme** — persistent toggle, shared across all views via React context
 - **Responsive layout** — mobile drawer menu with hamburger navigation, desktop sidebar with collapse
 - **Lock screen** — optional access code to protect the workspace (env-configured)
 - **Warm "old paper" light theme + navy dark theme** — custom BlockNote color overrides
 
 ### MCP Server (AI Integration)
+
 - **Model Context Protocol server** deployed alongside the app
 - Exposes workspace pages as tools consumable by AI assistants (Claude Code, etc.)
 - Supports stdio (local) and HTTP transports
 - Bearer-token authenticated
 
 ### Backend
+
 - **Supabase Postgres** — all page data persisted with RLS policies
 - **Supabase Storage** — image uploads for covers and inline media
 - **Optimistic updates** — UI updates instantly, Supabase sync runs in background
@@ -57,17 +63,17 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 
 ## Tech Stack
 
-| Layer | Technology |
-|---|---|
-| Frontend | React 18 + TypeScript + Vite 5 |
-| Routing | React Router v6 |
-| Editor | BlockNote 0.47 |
-| Drag & drop | dnd-kit |
-| Backend | Supabase (Postgres + Storage) |
-| Styling | Tailwind CSS |
-| Testing | Vitest + Testing Library |
+| Layer          | Technology                       |
+| -------------- | -------------------------------- |
+| Frontend       | React 18 + TypeScript + Vite 5   |
+| Routing        | React Router v6                  |
+| Editor         | BlockNote 0.47                   |
+| Drag & drop    | dnd-kit                          |
+| Backend        | Supabase (Postgres + Storage)    |
+| Styling        | Tailwind CSS                     |
+| Testing        | Vitest + Testing Library         |
 | AI Integration | Model Context Protocol (MCP) SDK |
-| Deploy | Vercel |
+| Deploy         | Vercel                           |
 
 ---
 
@@ -166,7 +172,7 @@ create trigger pages_updated_at
   for each row execute function set_updated_at();
 
 -- Storage bucket
-insert into storage.buckets (id, name, public) values ('logblock', 'logblock', true);
+insert into storage.buckets (id, name, public) values ('mylogblock', 'mylogblock', true);
 
 -- RLS (single-user workspace — anon access)
 alter table pages enable row level security;
@@ -175,8 +181,8 @@ create policy "anon insert" on pages for insert with check (true);
 create policy "anon update" on pages for update using (true);
 create policy "anon delete" on pages for delete using (true);
 
-create policy "anon storage read"   on storage.objects for select using (bucket_id = 'logblock');
-create policy "anon storage insert" on storage.objects for insert with check (bucket_id = 'logblock');
+create policy "anon storage read"   on storage.objects for select using (bucket_id = 'mylogblock');
+create policy "anon storage insert" on storage.objects for insert with check (bucket_id = 'mylogblock');
 ```
 
 ---
