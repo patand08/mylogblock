@@ -1,5 +1,6 @@
 import { Page } from "@/types";
 import clsx from "clsx";
+import Twemoji from "@/components/ui/Twemoji";
 
 interface Props {
   crumbs: Page[];
@@ -31,7 +32,7 @@ export default function Breadcrumb({ crumbs, onNavigate, onSlugClick }: Props) {
                   : "hover:underline cursor-pointer"
               )}
             >
-              {page.icon && <span className="mr-1">{page.icon}</span>}
+              {page.icon && <Twemoji text={page.icon} className="mr-1 text-sm" />}
               {page.title}
             </button>
           </span>

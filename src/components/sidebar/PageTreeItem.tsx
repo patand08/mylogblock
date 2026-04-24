@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { Page } from "@/types";
 import { PageTreeNode } from "@/lib/page-utils";
 import IconButton from "@/components/ui/IconButton";
+import Twemoji from "@/components/ui/Twemoji";
 import { useSortable } from "@dnd-kit/sortable";
 import { CSS } from "@dnd-kit/utilities";
 
@@ -88,7 +89,7 @@ export default function PageTreeItem({
         </button>
 
         {/* Icon */}
-        <span className="text-sm flex-shrink-0">{node.page.icon ?? "📄"}</span>
+        <Twemoji text={node.page.icon ?? "📄"} className="text-sm flex-shrink-0" />
 
         {/* Title */}
         {renaming ? (

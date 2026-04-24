@@ -95,7 +95,7 @@ export default function WorkspacePage() {
   return (
     <div data-testid="workspace" className="flex flex-col h-screen bg-lb-base overflow-hidden sm:flex-row">
       {/* Mobile header with hamburger button */}
-      <header className="sm:hidden flex items-center justify-between h-12 px-3 border-b border-lb-border bg-lb-surface">
+      <header className="sm:hidden flex items-center justify-between h-12 px-3 border-b border-lb-border bg-lb-sidebar">
         <button
           data-testid="mobile-menu-button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -145,7 +145,7 @@ export default function WorkspacePage() {
       {/* Mobile drawer menu */}
       <div
         data-testid="mobile-drawer"
-        className={`fixed left-0 top-0 h-full w-64 bg-lb-surface border-r border-lb-border transform transition-transform duration-200 sm:hidden z-50 ${
+        className={`fixed left-0 top-0 h-full w-64 bg-lb-sidebar border-r border-lb-border transform transition-transform duration-200 sm:hidden z-50 ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{

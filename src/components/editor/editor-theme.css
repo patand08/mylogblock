@@ -30,7 +30,8 @@ div[data-color-scheme="light"] .bn-container {
   --bn-colors-highlights-gray-background: #ebe5d5;
   /* Highlights text - sepia */
   --bn-colors-highlights-gray-text: #8b7d6b;
-  --bn-font-family: "Commissioner", system-ui, sans-serif;
+  --bn-font-family: "Commissioner", "Twemoji", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", system-ui,
+    sans-serif;
 }
 
 /* Slash command menu styling */
@@ -89,7 +90,8 @@ div[data-color-scheme="light"] .bn-container {
 .bn-editor h1,
 .bn-editor h2,
 .bn-editor h3 {
-  font-family: "Commissioner", system-ui, sans-serif !important;
+  font-family: "Commissioner", "Twemoji", "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", system-ui,
+    sans-serif !important;
   color: #4a3f35 !important;
 }
 
@@ -127,7 +129,7 @@ div[data-color-scheme="light"] .bn-container {
 .bn-editor blockquote,
 .bn-editor blockquote p,
 .bn-editor blockquote .bn-inline-content {
-  font-family: "Google Sans Code", ui-monospace, monospace !important;
+  font-family: "Google Sans Code", "Twemoji", "Segoe UI Emoji", "Apple Color Emoji", ui-monospace, monospace !important;
 }
 .bn-editor blockquote {
   border-left: 3px solid rgba(196, 154, 108, 0.5) !important;
@@ -138,7 +140,7 @@ div[data-color-scheme="light"] .bn-container {
 
 /* Code: monospace (inline + fenced) */
 .bn-editor code {
-  font-family: "Google Sans Code", ui-monospace, monospace !important;
+  font-family: "Google Sans Code", "Twemoji", "Segoe UI Emoji", "Apple Color Emoji", ui-monospace, monospace !important;
   font-size: 0.9em;
 }
 .bn-editor pre {
@@ -182,6 +184,7 @@ div[data-color-scheme="light"] .bn-container {
 .bn-editor .ProseMirror {
   padding-left: 0 !important;
   padding-right: 0 !important;
+  /* Do not use font-variant-emoji: emoji — it forces the OS emoji font and bypasses Twemoji COLR in the stack */
 }
 .bn-editor {
   padding-left: 0 !important;
@@ -207,18 +210,18 @@ div[data-color-scheme="light"] .bn-container {
 :root[data-theme="dark"] [data-color-scheme="light"] .bn-container,
 :root[data-theme="dark"] .bn-container[data-color-scheme="light"],
 :root[data-theme="dark"] div[data-color-scheme="light"] .bn-container {
-  /* Main editor background - deep navy */
-  --bn-colors-editor-background: #0f172a;
+  /* Main editor background - Discord content grey */
+  --bn-colors-editor-background: #313338;
   /* Text color - off-white */
-  --bn-colors-editor-text: #f1f5f9;
-  /* Menu background - slate */
-  --bn-colors-menu-background: #1e293b;
+  --bn-colors-editor-text: #f2f3f5;
+  /* Menu background */
+  --bn-colors-menu-background: #2b2d31;
   /* Menu text */
-  --bn-colors-menu-text: #f1f5f9;
-  /* Tooltip background - darker slate */
-  --bn-colors-tooltip-background: #334155;
+  --bn-colors-menu-text: #f2f3f5;
+  /* Tooltip background */
+  --bn-colors-tooltip-background: #3f4248;
   /* Tooltip text */
-  --bn-colors-tooltip-text: #f1f5f9;
+  --bn-colors-tooltip-text: #f2f3f5;
   /* Hovered background - blue tint */
   --bn-colors-hovered-background: rgba(59, 130, 246, 0.15);
   /* Selected/active background - blue */
@@ -227,42 +230,42 @@ div[data-color-scheme="light"] .bn-container {
   --bn-colors-disabled-background: rgba(148, 163, 184, 0.15);
   /* Shadow - dark */
   --bn-colors-shadow: rgba(0, 0, 0, 0.4);
-  /* Border - slate */
-  --bn-colors-border: rgba(148, 163, 184, 0.2);
+  /* Border */
+  --bn-colors-border: rgba(255, 255, 255, 0.08);
   /* Side menu color - blue */
   --bn-colors-side-menu: rgba(59, 130, 246, 0.6);
-  /* Highlights - slate */
-  --bn-colors-highlights-gray-background: #1e293b;
-  /* Highlights text - muted blue-gray */
-  --bn-colors-highlights-gray-text: #94a3b8;
+  /* Highlights */
+  --bn-colors-highlights-gray-background: #2b2d31;
+  /* Highlights text - muted */
+  --bn-colors-highlights-gray-text: #b5bac1;
 }
 
 /* Night Mode - Slash command menu */
 :root[data-theme="dark"] .bn-suggestion-menu {
-  background: #1e293b !important;
+  background: #2b2d31 !important;
   border: 1px solid rgba(59, 130, 246, 0.3) !important;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
 }
 
 :root[data-theme="dark"] .bn-suggestion-menu .bn-suggestion-menu-item {
-  color: #f1f5f9 !important;
+  color: #f2f3f5 !important;
 }
 :root[data-theme="dark"] .bn-suggestion-menu .bn-suggestion-menu-item:hover {
   background: rgba(59, 130, 246, 0.2) !important;
 }
 :root[data-theme="dark"] .bn-suggestion-menu .bn-suggestion-menu-subtext {
-  color: #94a3b8 !important;
+  color: #b5bac1 !important;
 }
 
 /* Night Mode - Formatting toolbar */
 :root[data-theme="dark"] .bn-toolbar {
-  background: #334155 !important;
+  background: #3f4248 !important;
   border: 1px solid rgba(59, 130, 246, 0.3) !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
 }
 
 :root[data-theme="dark"] .bn-toolbar button {
-  color: #f1f5f9 !important;
+  color: #f2f3f5 !important;
 }
 :root[data-theme="dark"] .bn-toolbar button:hover {
   background: rgba(59, 130, 246, 0.2) !important;
@@ -278,23 +281,23 @@ div[data-color-scheme="light"] .bn-container {
 
 /* Night Mode - Code block */
 :root[data-theme="dark"] .bn-editor pre {
-  background: #1e293b !important;
+  background: #2b2d31 !important;
   border: 1px solid rgba(59, 130, 246, 0.3) !important;
 }
 :root[data-theme="dark"] .bn-editor pre code {
-  color: #f1f5f9 !important;
+  color: #f2f3f5 !important;
 }
 
 /* Night Mode - Headings */
 :root[data-theme="dark"] .bn-editor h1,
 :root[data-theme="dark"] .bn-editor h2,
 :root[data-theme="dark"] .bn-editor h3 {
-  color: #f1f5f9 !important;
+  color: #f2f3f5 !important;
 }
 
 /* Night Mode - Callout block */
 :root[data-theme="dark"] .bn-editor [data-node-type="callout"] {
-  background: rgba(30, 41, 59, 0.5) !important;
+  background: rgba(43, 45, 49, 0.65) !important;
   border: 1px solid rgba(59, 130, 246, 0.3) !important;
 }
 
@@ -316,22 +319,22 @@ div[data-color-scheme="light"] .bn-container {
 /* Night Mode - Blockquote */
 :root[data-theme="dark"] .bn-editor blockquote {
   border-left: 3px solid rgba(59, 130, 246, 0.5) !important;
-  background: rgba(30, 41, 59, 0.3) !important;
-  color: #94a3b8 !important;
+  background: rgba(43, 45, 49, 0.45) !important;
+  color: #b5bac1 !important;
 }
 
 /* Night Mode - Table styling */
 :root[data-theme="dark"] .bn-editor table {
-  background: #0f172a !important;
+  background: #313338 !important;
   border: 1px solid rgba(59, 130, 246, 0.3) !important;
 }
 :root[data-theme="dark"] .bn-editor th {
-  background: #1e293b !important;
-  color: #f1f5f9 !important;
+  background: #2b2d31 !important;
+  color: #f2f3f5 !important;
 }
 :root[data-theme="dark"] .bn-editor td {
-  background: #0f172a !important;
-  color: #f1f5f9 !important;
+  background: #313338 !important;
+  color: #f2f3f5 !important;
 }
 :root[data-theme="dark"] .bn-editor tr:nth-child(even) td {
   background: rgba(59, 130, 246, 0.08) !important;
@@ -340,5 +343,5 @@ div[data-color-scheme="light"] .bn-container {
 /* Night Mode - Force editor background */
 :root[data-theme="dark"] [data-color-scheme="light"] .bn-editor,
 :root[data-theme="dark"] [data-color-scheme="light"] .ProseMirror {
-  background: #0f172a !important;
+  background: #313338 !important;
 }

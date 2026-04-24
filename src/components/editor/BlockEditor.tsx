@@ -77,6 +77,7 @@ function BlockEditorInner({ pageId, initialContent, onChange }: Props & { forceE
   }
 
   return (
+    <div className="w-full">
     <BlockNoteView editor={editor} theme="light" onChange={handleChange} slashMenu={false}>
       <SuggestionMenuController
         triggerCharacter="/"
@@ -113,6 +114,7 @@ function BlockEditorInner({ pageId, initialContent, onChange }: Props & { forceE
         )}
       />
     </BlockNoteView>
+    </div>
   );
 }
 

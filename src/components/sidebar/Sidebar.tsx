@@ -17,7 +17,7 @@ export default function Sidebar({
       data-testid="sidebar"
       aria-label="Sidebar"
       className={clsx(
-        "flex flex-col h-full bg-lb-surface border-r border-lb-border",
+        "flex flex-col h-full bg-lb-sidebar border-r border-lb-border",
         "transition-all duration-200",
         "hidden sm:flex", // Hidden on mobile, visible from sm breakpoint
         collapsed ? "w-12" : "w-64"

@@ -5,27 +5,37 @@
 @tailwind utilities;
 
 @layer base {
+  /* Twitter Twemoji as COLR (Mozilla build) — emoji codepoints without DOM <img> replacement */
+  @font-face {
+    font-family: "Twemoji";
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url("https://cdn.jsdelivr.net/npm/twemoji-colr-font@15.0.3/twemoji.woff2") format("woff2");
+  }
+
   :root {
     color-scheme: light;
     --lb-gradient: radial-gradient(ellipse at 20% 80%, #d4a574 0%, #b88a5c 35%, #a67c52 55%, #f5f0e6 85%);
   }
 
-  /* Night Mode - calm, relaxed, dark-blueish palette */
+  /* Night Mode - Discord-like neutrals: sidebar darker than main content */
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --lb-gradient: radial-gradient(ellipse at 50% 100%, #1e293b 0%, #0f172a 60%, #020617 100%);
+    --lb-gradient: #313338;
 
-    /* Backgrounds - deep navy/slate */
-    --lb-base: #0f172a;
-    --lb-surface: #1e293b;
-    --lb-surface-2: #334155;
-    --lb-border: rgba(148, 163, 184, 0.2);
+    /* Main pane / page chrome (#313338) vs sidebar (#2b2d31); inputs/search inset (#1e1f22) */
+    --lb-base: #313338;
+    --lb-sidebar: #2b2d31;
+    --lb-surface: #2b2d31;
+    --lb-surface-2: #1e1f22;
+    --lb-border: rgba(255, 255, 255, 0.08);
 
-    /* Text - muted blue-gray */
-    --lb-text: #f1f5f9;
-    --lb-text-muted: #94a3b8;
+    /* Text */
+    --lb-text: #f2f3f5;
+    --lb-text-muted: #b5bac1;
 
-    /* Accents - calm blue */
+    /* Accents - calm blue (reads on grey) */
     --lb-accent-green: #3b82f6;
     --lb-accent-green-dark: #2563eb;
     --lb-neon-purple: #1e40af;
@@ -33,8 +43,8 @@
 
     /* Actions */
     --lb-action-orange: #3b82f6;
-    --lb-danger-brown: #dc2626;
-    --lb-hover: #334155;
+    --lb-danger-brown: #ed4245;
+    --lb-hover: #3f4248;
   }
 
   * {
@@ -64,7 +74,11 @@
   }
 
   .lb-button-primary {
-    @apply lb-button bg-lb-accent-green hover:bg-lb-accent-green-dark text-lb-base text-lb-text;
+    @apply lb-button bg-lb-accent-green hover:bg-lb-accent-green-dark text-lb-text;
+  }
+
+  :root[data-theme="dark"] .lb-button-primary {
+    @apply text-white;
   }
 
   .lb-button-secondary {
@@ -117,6 +131,17 @@
   /* CTA button — high-contrast action */
   .lb-button-brand {
     @apply lb-button bg-lb-accent-green hover:bg-lb-accent-green/90 text-black font-bold;
+  }
+
+  /* Twemoji: scale SVG emoji with surrounding text */
+  .twemoji-wrap img.emoji,
+  /* Parsed Twemoji inside BlockNote (read-only, etc.) has no .twemoji-wrap parent */
+  img.emoji {
+    height: 1em;
+    width: 1em;
+    margin: 0 0.05em;
+    vertical-align: -0.125em;
+    display: inline-block;
   }
 
   .lb-skeleton-shimmer {

@@ -15,8 +15,11 @@ import { BlockNoteView } from "@blocknote/mantine";
 import "@blocknote/mantine/style.css";
 import { useCreateBlockNote } from "@blocknote/react";
 import clsx from "clsx";
-import { useEffect, useMemo, useState } from "react";
+import twemoji from "twemoji";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import Twemoji from "@/components/ui/Twemoji";
+import { TWEMOJI_SVG_OPTIONS } from "@/components/ui/Twemoji";
 
 const PAGE_TRANSITION_MS = 320;
 
@@ -82,7 +85,7 @@ function SubtreeItem({
         >
           {expanded ? "▾" : "▸"}
         </button>
-        <span className="text-sm flex-shrink-0">{node.page.icon ?? "📄"}</span>
+        <Twemoji text={node.page.icon ?? "📄"} className="text-sm flex-shrink-0" />
         <span className="truncate">{node.page.title}</span>
       </div>
       {hasChildren && expanded && (
@@ -103,6 +106,7 @@ function SubtreeItem({
 }
 
 function ReadOnlyEditor({ body }: { body: unknown }) {
+  const hostRef = useRef<HTMLDivElement>(null);
   const safeContent = useMemo(() => {
     if (!Array.isArray(body) || body.length === 0) return undefined;
     try {
@@ -124,8 +128,20 @@ function ReadOnlyEditor({ body }: { body: unknown }) {
     },
   });
 
+  useLayoutEffect(() => {
+    const run = () => {
+      const root = hostRef.current?.querySelector(".ProseMirror");
+      if (root instanceof HTMLElement) {
+        twemoji.parse(root, TWEMOJI_SVG_OPTIONS);
+      }
+    };
+    run();
+    const id = requestAnimationFrame(run);
+    return () => cancelAnimationFrame(id);
+  }, [editor, safeContent]);
+
   return (
-    <div className="w-full read-only-editor">
+    <div ref={hostRef} className="w-full read-only-editor">
       <BlockNoteView editor={editor} theme="light" editable={false} />
     </div>
   );
@@ -194,7 +210,7 @@ export default function ReadOnlyPage() {
   const renderSidebar = () => (
     <aside
       className={clsx(
-        "flex-shrink-0 flex flex-col h-full bg-lb-surface border-r border-lb-border transition-all duration-200",
+        "flex-shrink-0 flex flex-col h-full bg-lb-sidebar border-r border-lb-border transition-all duration-200",
         sidebarCollapsed ? "w-12" : "w-64",
       )}
     >
@@ -253,7 +269,7 @@ export default function ReadOnlyPage() {
   return (
     <div className="flex flex-col h-screen bg-lb-base overflow-hidden sm:flex-row">
       {/* Mobile header with hamburger button */}
-      <header className="sm:hidden flex items-center justify-between h-12 px-3 border-b border-lb-border bg-lb-surface">
+      <header className="sm:hidden flex items-center justify-between h-12 px-3 border-b border-lb-border bg-lb-sidebar">
         <button
           data-testid="mobile-menu-button"
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -304,7 +320,7 @@ export default function ReadOnlyPage() {
       {/* Mobile drawer menu */}
       <div
         data-testid="mobile-drawer"
-        className={`fixed left-0 top-0 h-full w-64 bg-lb-surface border-r border-lb-border transform transition-transform duration-200 sm:hidden z-50 ${
+        className={`fixed left-0 top-0 h-full w-64 bg-lb-sidebar border-r border-lb-border transform transition-transform duration-200 sm:hidden z-50 ${
           mobileMenuOpen ? "translate-x-0" : "-translate-x-full"
         }`}
         style={{
@@ -357,7 +373,7 @@ export default function ReadOnlyPage() {
             >
               <div className="flex items-center gap-3 mb-6">
                 {activePage.icon && (
-                  <span className="text-4xl leading-none">{activePage.icon}</span>
+                  <Twemoji text={activePage.icon} className="text-4xl leading-none" />
                 )}
                 <h1 className="text-3xl sm:text-4xl font-bold font-display text-lb-text">
                   {activePage.title}

@@ -46,7 +46,7 @@ describe("EditorPage - Mobile Responsiveness", () => {
     });
   });
 
-  it("should have responsive padding on mobile (px-3 sm:px-8 lg:px-16)", () => {
+  it("should have responsive horizontal padding on header (px-4 sm:px-8 lg:px-16)", () => {
     render(
       <EditorPage
         page={mockPage}
@@ -56,11 +56,12 @@ describe("EditorPage - Mobile Responsiveness", () => {
       />
     );
 
-    const contentArea = screen.getByTestId("editor-page").querySelector("div:nth-child(2)");
-    expect(contentArea).toHaveClass("px-3", "sm:px-8", "lg:px-16");
+    const headerBlock = screen.getByTestId("page-header").querySelector(".px-4");
+    expect(headerBlock).toBeTruthy();
+    expect(headerBlock).toHaveClass("px-4", "sm:px-8", "lg:px-16");
   });
 
-  it("should have responsive bottom padding (pb-3 sm:pb-8 lg:pb-16)", () => {
+  it("should have responsive bottom padding on editor content (pb-4 sm:pb-8 lg:pb-16)", () => {
     render(
       <EditorPage
         page={mockPage}
@@ -71,7 +72,7 @@ describe("EditorPage - Mobile Responsiveness", () => {
     );
 
     const contentArea = screen.getByTestId("editor-content");
-    expect(contentArea).toHaveClass("pb-3", "sm:pb-8", "lg:pb-16");
+    expect(contentArea).toHaveClass("pb-4", "sm:pb-8", "lg:pb-16");
   });
 
   it("should use flex column layout", () => {

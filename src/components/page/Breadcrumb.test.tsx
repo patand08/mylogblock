@@ -1,5 +1,11 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
+
+vi.mock("@/components/ui/Twemoji", () => ({
+  default: ({ text }: { text: string }) => <span>{text}</span>,
+  TWEMOJI_SVG_OPTIONS: {},
+}));
+
 import Breadcrumb from "./Breadcrumb";
 import { Page } from "@/types";
 

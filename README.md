@@ -26,7 +26,7 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 
 - **Infinite nesting** — pages can have sub-pages and sub-sub-pages
 - **Tree drag-and-drop** — reorder pages at any level, move across branches, nest (indent) and outdent pages via horizontal drag
-- **Page icons** — emoji picker per page (header + sidebar)
+- **Page icons** — emoji picker per page (header + sidebar); [Twemoji](https://github.com/twitter/twemoji) SVG rendering in the UI, breadcrumbs, read-only page body, and picker (`EmojiStyle.TWITTER`); inline body text while editing uses native emoji (ProseMirror cannot keep Twemoji `<img>` nodes in the live editor)
 - **Cover images** — upload, reposition vertically, and remove cover photos
 - **Breadcrumb trail** — clickable hierarchy navigation
 - **Sidebar search** — real-time filter by page title

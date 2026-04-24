@@ -25,6 +25,9 @@ vi.mock("@blocknote/core", () => ({
 }));
 vi.mock("@blocknote/core/fonts/inter.css", () => ({}));
 vi.mock("@blocknote/mantine/style.css", () => ({}));
+vi.mock("twemoji", () => ({
+  default: { parse: vi.fn() },
+}));
 
 // Mock Supabase so context doesn't make real network calls in tests
 vi.mock("@/lib/pageRepo", () => ({
@@ -49,17 +52,20 @@ vi.mock("@/lib/pageRepo", () => ({
 
 import WorkspacePage from "./WorkspacePage";
 import { WorkspaceProvider } from "@/context/WorkspaceContext";
+import { ThemeProvider } from "@/context/ThemeContext";
 
 async function renderApp(initialPath = "/") {
   await act(async () => {
     render(
       <MemoryRouter initialEntries={[initialPath]}>
-        <WorkspaceProvider>
-          <Routes>
-            <Route path="/" element={<WorkspacePage />} />
-            <Route path="/page/:pageId" element={<WorkspacePage />} />
-          </Routes>
-        </WorkspaceProvider>
+        <ThemeProvider>
+          <WorkspaceProvider>
+            <Routes>
+              <Route path="/" element={<WorkspacePage />} />
+              <Route path="/page/:pageId" element={<WorkspacePage />} />
+            </Routes>
+          </WorkspaceProvider>
+        </ThemeProvider>
       </MemoryRouter>
     );
   });

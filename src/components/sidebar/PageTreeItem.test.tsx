@@ -1,5 +1,11 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
+
+vi.mock("@/components/ui/Twemoji", () => ({
+  default: ({ text }: { text: string }) => <span data-testid="twemoji-stub">{text}</span>,
+  TWEMOJI_SVG_OPTIONS: {},
+}));
+
 import PageTreeItem from "./PageTreeItem";
 import { PageTreeNode } from "@/lib/page-utils";
 import { Page } from "@/types";

@@ -2,6 +2,11 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import WorkspacePage from "./WorkspacePage";
 import { BrowserRouter } from "react-router-dom";
+import { ThemeProvider } from "@/context/ThemeContext";
+
+vi.mock("twemoji", () => ({
+  default: { parse: vi.fn() },
+}));
 
 const mockPages = [
   {
@@ -93,34 +98,32 @@ describe("WorkspacePage - Mobile Menu", () => {
     });
   });
 
-  it("should display mobile header on mobile (sm:hidden)", () => {
-    render(
+  function renderPage() {
+    return render(
       <BrowserRouter>
-        <WorkspacePage />
+        <ThemeProvider>
+          <WorkspacePage />
+        </ThemeProvider>
       </BrowserRouter>
     );
+  }
+
+  it("should display mobile header on mobile (sm:hidden)", () => {
+    renderPage();
 
     const header = screen.getByRole("banner");
     expect(header).toHaveClass("sm:hidden");
   });
 
   it("should show hamburger button on mobile", () => {
-    render(
-      <BrowserRouter>
-        <WorkspacePage />
-      </BrowserRouter>
-    );
+    renderPage();
 
     const button = screen.getByTestId("mobile-menu-button");
     expect(button).toBeInTheDocument();
   });
 
   it("should toggle mobile drawer when hamburger button clicked", () => {
-    render(
-      <BrowserRouter>
-        <WorkspacePage />
-      </BrowserRouter>
-    );
+    renderPage();
 
     const button = screen.getByTestId("mobile-menu-button");
     const drawer = screen.getByTestId("mobile-drawer");
@@ -138,11 +141,7 @@ describe("WorkspacePage - Mobile Menu", () => {
   });
 
   it("should close drawer when overlay clicked", () => {
-    render(
-      <BrowserRouter>
-        <WorkspacePage />
-      </BrowserRouter>
-    );
+    renderPage();
 
     const button = screen.getByTestId("mobile-menu-button");
     fireEvent.click(button); // Open drawer
@@ -154,34 +153,22 @@ describe("WorkspacePage - Mobile Menu", () => {
     expect(drawer).toHaveClass("-translate-x-full");
   });
 
-  it("should show LogBlock title in mobile header", () => {
-    render(
-      <BrowserRouter>
-        <WorkspacePage />
-      </BrowserRouter>
-    );
+  it("should show MyLogBlock title in mobile header", () => {
+    renderPage();
 
     const header = screen.getByRole("banner");
-    expect(header).toHaveTextContent("LogBlock");
+    expect(header).toHaveTextContent("MyLogBlock");
   });
 
   it("should hide drawer on desktop (sm:hidden)", () => {
-    render(
-      <BrowserRouter>
-        <WorkspacePage />
-      </BrowserRouter>
-    );
+    renderPage();
 
     const drawer = screen.getByTestId("mobile-drawer");
     expect(drawer).toHaveClass("sm:hidden");
   });
 
   it("should close drawer when page selected from mobile menu", () => {
-    render(
-      <BrowserRouter>
-        <WorkspacePage />
-      </BrowserRouter>
-    );
+    renderPage();
 
     const button = screen.getByTestId("mobile-menu-button");
     fireEvent.click(button); // Open drawer
@@ -195,11 +182,7 @@ describe("WorkspacePage - Mobile Menu", () => {
   });
 
   it("should show drawer overlay only when drawer is open", () => {
-    render(
-      <BrowserRouter>
-        <WorkspacePage />
-      </BrowserRouter>
-    );
+    renderPage();
 
     // Overlay should not exist initially
     expect(screen.queryByTestId("mobile-drawer-overlay")).not.toBeInTheDocument();

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { checkSlugAvailable, setPageSlug } from "@/lib/pageRepo";
 import { Page } from "@/types";
+import Twemoji from "@/components/ui/Twemoji";
 
 const RESERVED = new Set(["page", "api", "mcp", "health"]);
 const SLUG_RE = /^[a-z0-9][a-z0-9-]*[a-z0-9]$|^[a-z0-9]$/;
@@ -162,7 +163,7 @@ export default function SlugModal({ page, open, onClose, onSaved }: Props) {
 
         {/* Page context */}
         <p className="text-xs text-lb-text-muted">
-          <span className="mr-1">{page.icon ?? "📄"}</span>
+          <Twemoji text={page.icon ?? "📄"} className="mr-1 text-base" />
           <span className="text-lb-text">{page.title}</span>
         </p>
 

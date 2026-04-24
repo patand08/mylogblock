@@ -5,7 +5,7 @@ import EmptyState from "./EmptyState";
 describe("EmptyState", () => {
   it("renders welcome message", () => {
     render(<EmptyState onCreatePage={vi.fn()} />);
-    expect(screen.getByText("LogBlock")).toBeInTheDocument();
+    expect(screen.getByText("MyLogBlock")).toBeInTheDocument();
   });
 
   it("renders Create page button", () => {
