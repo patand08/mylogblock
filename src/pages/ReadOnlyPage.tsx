@@ -350,14 +350,14 @@ export default function ReadOnlyPage() {
               </div>
             )}
             <div className="px-3 sm:px-8 lg:px-16 py-6 sm:py-8 flex-1">
-              <div className="flex items-center gap-3 mb-2">
+              <div className="flex items-center gap-3 mb-6">
                 {activePage.icon && (
-                  <span className="text-4xl">{activePage.icon}</span>
+                  <span className="text-4xl leading-none">{activePage.icon}</span>
                 )}
+                <h1 className="text-3xl sm:text-4xl font-bold font-display text-lb-text">
+                  {activePage.title}
+                </h1>
               </div>
-              <h1 className="text-3xl sm:text-4xl font-bold font-display text-lb-text mb-6">
-                {activePage.title}
-              </h1>
               <ReadOnlyEditor key={activePage.id} body={activePage.body} />
             </div>
           </div>
