@@ -11,10 +11,13 @@ interface WorkspaceContextValue {
   tree: PageTreeNode[];
   activePageId: string | null;
   setActivePageId: (id: string | null) => void;
-  createPage: (input: CreatePageInput) => Page;
+  createPage: (
+    input: CreatePageInput,
+    onPersisted?: (saved: Page, localId: string) => void
+  ) => Page;
   updatePage: (id: string, updates: UpdatePageInput) => void;
   deletePage: (id: string) => void;
-  reorderPagesOpt: (activeId: string, overId: string) => void;
+  reorderPagesOpt: (activeId: string, overId: string, horizontalDelta?: number) => void;
   loading: boolean;
   error: string | null;
 }
@@ -35,7 +38,10 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       .finally(() => setLoading(false));
   }, []);
 
-  const createPage = useCallback((input: CreatePageInput): Page => {
+  const createPage = useCallback((
+    input: CreatePageInput,
+    onPersisted?: (saved: Page, localId: string) => void
+  ): Page => {
     const siblings = pages.filter((p) => p.parent_id === (input.parent_id ?? null) && !p.is_deleted);
     const maxOrder = siblings.reduce((m, p) => Math.max(m, p.order_index), -1);
     const local = createPageObject(input, WORKSPACE_ID, maxOrder + 1);
@@ -45,6 +51,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       .then((saved) => {
         setPages((prev) => prev.map((p) => (p.id === local.id ? saved : p)));
         setActivePageId((prev) => (prev === local.id ? saved.id : prev));
+        onPersisted?.(saved, local.id);
       })
       .catch((e: unknown) => {
         setPages((prev) => prev.filter((p) => p.id !== local.id));
@@ -70,9 +77,9 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const reorderPagesOpt = useCallback((activeId: string, overId: string) => {
+  const reorderPagesOpt = useCallback((activeId: string, overId: string, horizontalDelta = 0) => {
     setPages((prev) => {
-      const reordered = reorderPages(prev, activeId, overId);
+      const reordered = reorderPages(prev, activeId, overId, horizontalDelta);
       // Persist to DB (fire-and-forget with error logging)
       const updates = reordered
         .filter((p) => !p.is_deleted)

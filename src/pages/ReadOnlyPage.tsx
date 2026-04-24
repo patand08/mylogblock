@@ -228,7 +228,7 @@ export default function ReadOnlyPage() {
         </button>
       </div>
       <div className="flex-1 overflow-y-auto py-2 px-1">
-        {!sidebarCollapsed &&
+        {!sidebarCollapsed && (
           tree.map((node) => (
             <SubtreeItem
               key={node.page.id}
@@ -236,7 +236,8 @@ export default function ReadOnlyPage() {
               activeId={activePage?.id ?? ""}
               onSelect={handleSelect}
             />
-          ))}
+          ))
+        )}
       </div>
       <div
         className={clsx(

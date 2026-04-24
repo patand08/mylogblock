@@ -25,7 +25,7 @@ interface Props {
   onCreatePage: (parentId?: string) => void;
   onDeletePage: (pageId: string) => void;
   onRenamePage: (pageId: string, title: string) => void;
-  onReorderPages: (activeId: string, overId: string) => void;
+  onReorderPages: (activeId: string, overId: string, horizontalDelta?: number) => void;
 }
 
 function flattenTree(nodes: PageTreeNode[]): PageTreeNode[] {
@@ -51,7 +51,7 @@ export default function SortablePageList({
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (over && active.id !== over.id) {
-      onReorderPages(String(active.id), String(over.id));
+      onReorderPages(String(active.id), String(over.id), event.delta.x);
     }
   }
 

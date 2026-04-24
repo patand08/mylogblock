@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { Page } from "@/types";
 import { useWorkspace } from "@/context/WorkspaceContext";
 import Sidebar from "@/components/sidebar/Sidebar";
+import SidebarSkeleton from "@/components/sidebar/SidebarSkeleton";
 import SortablePageList from "@/components/sidebar/SortablePageList";
 import EditorPage from "@/components/page/EditorPage";
 import EmptyState from "@/components/page/EmptyState";
@@ -61,12 +62,17 @@ export default function WorkspacePage() {
 
   function handleCreatePage(parentId?: string) {
     setIsPageTransitioning(true);
-    const page = createPage({ title: "Untitled", parent_id: parentId ?? null });
+    const page = createPage(
+      { title: "Untitled", parent_id: parentId ?? null },
+      (saved, localId) => {
+        // Replace temporary local-id URL with persisted DB id to avoid route mismatch/flicker.
+        navigate(`/page/${saved.id}`, { replace: true });
+        setPendingPage((prev) => (prev?.id === localId ? null : prev));
+      }
+    );
     setPendingPage(page);
     setActivePageId(page.id);
     navigate(`/page/${page.id}`);
-    // Clear pending state after a short delay to allow state to propagate
-    setTimeout(() => setPendingPage(null), 100);
   }
 
   function handleRequestDelete(id: string) {
@@ -112,15 +118,19 @@ export default function WorkspacePage() {
         collapsed={sidebarCollapsed}
         onToggleCollapse={() => setSidebarCollapsed((v) => !v)}
       >
-        <SortablePageList
-          tree={tree}
-          activePageId={activePageId}
-          onSelect={handleSelectPage}
-          onCreatePage={handleCreatePage}
-          onDeletePage={handleRequestDelete}
-          onRenamePage={handleRenamePage}
-          onReorderPages={reorderPagesOpt}
-        />
+        {loading ? (
+          <SidebarSkeleton />
+        ) : (
+          <SortablePageList
+            tree={tree}
+            activePageId={activePageId}
+            onSelect={handleSelectPage}
+            onCreatePage={handleCreatePage}
+            onDeletePage={handleRequestDelete}
+            onRenamePage={handleRenamePage}
+            onReorderPages={reorderPagesOpt}
+          />
+        )}
       </Sidebar>
 
       {/* Mobile drawer overlay */}
@@ -144,18 +154,22 @@ export default function WorkspacePage() {
       >
         <div className="h-[calc(100vh-48px)] flex flex-col py-2">
           <div className="flex-1 overflow-y-auto px-2">
-            <SortablePageList
-              tree={tree}
-              activePageId={activePageId}
-              onSelect={(page) => {
-                handleSelectPage(page);
-                setMobileMenuOpen(false);
-              }}
-              onCreatePage={handleCreatePage}
-              onDeletePage={handleRequestDelete}
-              onRenamePage={handleRenamePage}
-              onReorderPages={reorderPagesOpt}
-            />
+            {loading ? (
+              <SidebarSkeleton />
+            ) : (
+              <SortablePageList
+                tree={tree}
+                activePageId={activePageId}
+                onSelect={(page) => {
+                  handleSelectPage(page);
+                  setMobileMenuOpen(false);
+                }}
+                onCreatePage={handleCreatePage}
+                onDeletePage={handleRequestDelete}
+                onRenamePage={handleRenamePage}
+                onReorderPages={reorderPagesOpt}
+              />
+            )}
           </div>
           {/* Night mode toggle - bottom of mobile drawer */}
           <div className="px-3 py-3 border-t border-lb-border">
