@@ -51,4 +51,21 @@ describe("EmojiPickerPopover", () => {
     expect(onChange).toHaveBeenCalledWith("🎉");
     expect(screen.queryByTestId("emoji-picker")).not.toBeInTheDocument();
   });
+
+  it("closes picker on outside pointerdown without calling onChange", () => {
+    const onChange = vi.fn();
+    render(
+      <div>
+        <EmojiPickerPopover value="🚀" onChange={onChange} />
+        <button type="button" data-testid="outside">
+          outside
+        </button>
+      </div>
+    );
+    fireEvent.click(screen.getByTestId("emoji-trigger"));
+    expect(screen.getByTestId("emoji-picker")).toBeInTheDocument();
+    fireEvent.pointerDown(screen.getByTestId("outside"));
+    expect(screen.queryByTestId("emoji-picker")).not.toBeInTheDocument();
+    expect(onChange).not.toHaveBeenCalled();
+  });
 });

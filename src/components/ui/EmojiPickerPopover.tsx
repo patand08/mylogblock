@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import EmojiPicker, { EmojiClickData, EmojiStyle, Theme } from "emoji-picker-react";
 import Twemoji from "@/components/ui/Twemoji";
 
@@ -33,7 +33,18 @@ interface Props {
 
 export default function EmojiPickerPopover({ value, onChange }: Props) {
   const [open, setOpen] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
   const pickerTheme = usePickerTheme();
+
+  useEffect(() => {
+    if (!open) return;
+    function handlePointerDown(e: PointerEvent) {
+      if (containerRef.current?.contains(e.target as Node)) return;
+      setOpen(false);
+    }
+    document.addEventListener("pointerdown", handlePointerDown);
+    return () => document.removeEventListener("pointerdown", handlePointerDown);
+  }, [open]);
 
   function handlePick(data: EmojiClickData) {
     onChange(data.emoji);
@@ -41,7 +52,7 @@ export default function EmojiPickerPopover({ value, onChange }: Props) {
   }
 
   return (
-    <div className="relative inline-block">
+    <div ref={containerRef} className="relative inline-block">
       <button
         data-testid="emoji-trigger"
         onClick={() => setOpen((v) => !v)}
