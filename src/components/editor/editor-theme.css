@@ -1,0 +1,322 @@
+/* LogBlock BlockNote "Old Paper Diary" warm cozy theme */
+[data-color-scheme="light"] .bn-container,
+.bn-container[data-color-scheme="light"],
+div[data-color-scheme="light"] .bn-container {
+  /* Main editor background - aged paper cream */
+  --bn-colors-editor-background: #f5f0e6;
+  /* Text color - dark brown ink */
+  --bn-colors-editor-text: #4a3f35;
+  /* Menu background - warm parchment */
+  --bn-colors-menu-background: #ebe5d5;
+  /* Menu text */
+  --bn-colors-menu-text: #4a3f35;
+  /* Tooltip background - warm beige */
+  --bn-colors-tooltip-background: #dfd8c8;
+  /* Tooltip text */
+  --bn-colors-tooltip-text: #4a3f35;
+  /* Hovered background - warm amber tint */
+  --bn-colors-hovered-background: rgba(196, 154, 108, 0.15);
+  /* Selected/active background - warm amber */
+  --bn-colors-selected-background: rgba(196, 154, 108, 0.25);
+  /* Disabled background */
+  --bn-colors-disabled-background: rgba(139, 125, 107, 0.15);
+  /* Shadow - warm brown */
+  --bn-colors-shadow: rgba(74, 63, 53, 0.15);
+  /* Border - warm tan */
+  --bn-colors-border: rgba(168, 143, 112, 0.4);
+  /* Side menu color - warm amber */
+  --bn-colors-side-menu: rgba(196, 154, 108, 0.6);
+  /* Highlights - parchment */
+  --bn-colors-highlights-gray-background: #ebe5d5;
+  /* Highlights text - sepia */
+  --bn-colors-highlights-gray-text: #8b7d6b;
+  --bn-font-family: "Inter", system-ui, sans-serif;
+}
+
+/* Slash command menu styling */
+.bn-suggestion-menu {
+  background: #ebe5d5 !important;
+  border: 1px solid rgba(196, 154, 108, 0.4) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 8px 32px rgba(74, 63, 53, 0.15) !important;
+}
+
+.bn-suggestion-menu .bn-suggestion-menu-item {
+  color: #4a3f35 !important;
+}
+.bn-suggestion-menu .bn-suggestion-menu-item:hover {
+  background: rgba(196, 154, 108, 0.3) !important;
+}
+.bn-suggestion-menu .bn-suggestion-menu-subtext {
+  color: #8b7d6b !important;
+}
+
+/* Formatting toolbar */
+.bn-toolbar {
+  background: #dfd8c8 !important;
+  border: 1px solid rgba(196, 154, 108, 0.3) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 16px rgba(74, 63, 53, 0.1) !important;
+}
+
+.bn-toolbar button {
+  color: #4a3f35 !important;
+}
+.bn-toolbar button:hover {
+  background: rgba(196, 154, 108, 0.2) !important;
+}
+.bn-toolbar button:active {
+  background: rgba(196, 154, 108, 0.4) !important;
+}
+
+/* Highlighted/selected text - warm amber color */
+.bn-editor .ProseMirror ::selection {
+  background: rgba(196, 154, 108, 0.3);
+}
+
+/* Code block */
+.bn-editor pre {
+  background: #ebe5d5 !important;
+  border: 1px solid rgba(196, 154, 108, 0.3) !important;
+  border-radius: 6px !important;
+  font-family: "JetBrains Mono", monospace !important;
+}
+.bn-editor pre code {
+  color: #4a3f35 !important;
+}
+
+/* Heading colors */
+.bn-editor h1,
+.bn-editor h2,
+.bn-editor h3 {
+  font-family: "Space Grotesk", system-ui, sans-serif !important;
+  color: #4a3f35 !important;
+}
+
+/* Callout block */
+.bn-editor [data-node-type="callout"] {
+  background: rgba(235, 229, 213, 0.5) !important;
+  border: 1px solid rgba(196, 154, 108, 0.3) !important;
+  border-radius: 6px !important;
+}
+
+/* Link color - warm amber */
+.bn-editor a {
+  color: #a67c52 !important;
+  text-decoration: none;
+}
+.bn-editor a:hover {
+  text-decoration: underline;
+}
+
+/* Drag handle - warm amber color */
+.bn-side-menu {
+  color: rgba(196, 154, 108, 0.7) !important;
+}
+
+/* Todo checkbox - warm amber */
+.bn-editor input[type="checkbox"]:checked {
+  accent-color: #c49a6c;
+}
+
+/* Blockquote */
+.bn-editor blockquote {
+  border-left: 3px solid rgba(196, 154, 108, 0.5) !important;
+  background: rgba(235, 229, 213, 0.3) !important;
+  padding-left: 12px !important;
+  color: #8b7d6b !important;
+}
+
+/* Table styling */
+.bn-editor table {
+  background: #f5f0e6 !important;
+  border: 1px solid rgba(196, 154, 108, 0.3) !important;
+}
+.bn-editor th {
+  background: #ebe5d5 !important;
+  color: #4a3f35 !important;
+}
+.bn-editor td {
+  background: #f5f0e6 !important;
+  color: #4a3f35 !important;
+}
+.bn-editor tr:nth-child(even) td {
+  background: rgba(196, 154, 108, 0.08) !important;
+}
+
+/* Block spacing */
+.bn-block-outer {
+  margin-bottom: 4px;
+}
+
+/* Padding inside colored/highlighted paragraph blocks */
+.bn-editor .bn-block [data-background-color] .bn-inline-content,
+.bn-editor .bn-block[data-background-color] .bn-inline-content {
+  padding: 10px 12px;
+  border-radius: 4px;
+}
+
+/* Remove BlockNote's built-in editor padding so blocks align with the page title */
+.bn-editor .ProseMirror {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+.bn-editor {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
+
+/* Read-only editor: prevent all editing interactions */
+.read-only-editor .ProseMirror {
+  cursor: default !important;
+}
+.read-only-editor .bn-side-menu,
+.read-only-editor .bn-drag-handle {
+  display: none !important;
+}
+
+/* Force editor background to match page background */
+[data-color-scheme="light"] .bn-editor,
+[data-color-scheme="light"] .ProseMirror {
+  background: #f5f0e6 !important;
+}
+
+/* Night Mode - BlockNote dark theme */
+:root[data-theme="dark"] [data-color-scheme="light"] .bn-container,
+:root[data-theme="dark"] .bn-container[data-color-scheme="light"],
+:root[data-theme="dark"] div[data-color-scheme="light"] .bn-container {
+  /* Main editor background - deep navy */
+  --bn-colors-editor-background: #0f172a;
+  /* Text color - off-white */
+  --bn-colors-editor-text: #f1f5f9;
+  /* Menu background - slate */
+  --bn-colors-menu-background: #1e293b;
+  /* Menu text */
+  --bn-colors-menu-text: #f1f5f9;
+  /* Tooltip background - darker slate */
+  --bn-colors-tooltip-background: #334155;
+  /* Tooltip text */
+  --bn-colors-tooltip-text: #f1f5f9;
+  /* Hovered background - blue tint */
+  --bn-colors-hovered-background: rgba(59, 130, 246, 0.15);
+  /* Selected/active background - blue */
+  --bn-colors-selected-background: rgba(59, 130, 246, 0.25);
+  /* Disabled background */
+  --bn-colors-disabled-background: rgba(148, 163, 184, 0.15);
+  /* Shadow - dark */
+  --bn-colors-shadow: rgba(0, 0, 0, 0.4);
+  /* Border - slate */
+  --bn-colors-border: rgba(148, 163, 184, 0.2);
+  /* Side menu color - blue */
+  --bn-colors-side-menu: rgba(59, 130, 246, 0.6);
+  /* Highlights - slate */
+  --bn-colors-highlights-gray-background: #1e293b;
+  /* Highlights text - muted blue-gray */
+  --bn-colors-highlights-gray-text: #94a3b8;
+}
+
+/* Night Mode - Slash command menu */
+:root[data-theme="dark"] .bn-suggestion-menu {
+  background: #1e293b !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4) !important;
+}
+
+:root[data-theme="dark"] .bn-suggestion-menu .bn-suggestion-menu-item {
+  color: #f1f5f9 !important;
+}
+:root[data-theme="dark"] .bn-suggestion-menu .bn-suggestion-menu-item:hover {
+  background: rgba(59, 130, 246, 0.2) !important;
+}
+:root[data-theme="dark"] .bn-suggestion-menu .bn-suggestion-menu-subtext {
+  color: #94a3b8 !important;
+}
+
+/* Night Mode - Formatting toolbar */
+:root[data-theme="dark"] .bn-toolbar {
+  background: #334155 !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3) !important;
+}
+
+:root[data-theme="dark"] .bn-toolbar button {
+  color: #f1f5f9 !important;
+}
+:root[data-theme="dark"] .bn-toolbar button:hover {
+  background: rgba(59, 130, 246, 0.2) !important;
+}
+:root[data-theme="dark"] .bn-toolbar button:active {
+  background: rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Night Mode - Selection */
+:root[data-theme="dark"] .bn-editor .ProseMirror ::selection {
+  background: rgba(59, 130, 246, 0.3);
+}
+
+/* Night Mode - Code block */
+:root[data-theme="dark"] .bn-editor pre {
+  background: #1e293b !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+:root[data-theme="dark"] .bn-editor pre code {
+  color: #f1f5f9 !important;
+}
+
+/* Night Mode - Headings */
+:root[data-theme="dark"] .bn-editor h1,
+:root[data-theme="dark"] .bn-editor h2,
+:root[data-theme="dark"] .bn-editor h3 {
+  color: #f1f5f9 !important;
+}
+
+/* Night Mode - Callout block */
+:root[data-theme="dark"] .bn-editor [data-node-type="callout"] {
+  background: rgba(30, 41, 59, 0.5) !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+
+/* Night Mode - Link color - calm blue */
+:root[data-theme="dark"] .bn-editor a {
+  color: #60a5fa !important;
+}
+
+/* Night Mode - Drag handle */
+:root[data-theme="dark"] .bn-side-menu {
+  color: rgba(59, 130, 246, 0.7) !important;
+}
+
+/* Night Mode - Todo checkbox - blue */
+:root[data-theme="dark"] .bn-editor input[type="checkbox"]:checked {
+  accent-color: #3b82f6;
+}
+
+/* Night Mode - Blockquote */
+:root[data-theme="dark"] .bn-editor blockquote {
+  border-left: 3px solid rgba(59, 130, 246, 0.5) !important;
+  background: rgba(30, 41, 59, 0.3) !important;
+  color: #94a3b8 !important;
+}
+
+/* Night Mode - Table styling */
+:root[data-theme="dark"] .bn-editor table {
+  background: #0f172a !important;
+  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+}
+:root[data-theme="dark"] .bn-editor th {
+  background: #1e293b !important;
+  color: #f1f5f9 !important;
+}
+:root[data-theme="dark"] .bn-editor td {
+  background: #0f172a !important;
+  color: #f1f5f9 !important;
+}
+:root[data-theme="dark"] .bn-editor tr:nth-child(even) td {
+  background: rgba(59, 130, 246, 0.08) !important;
+}
+
+/* Night Mode - Force editor background */
+:root[data-theme="dark"] [data-color-scheme="light"] .bn-editor,
+:root[data-theme="dark"] [data-color-scheme="light"] .ProseMirror {
+  background: #0f172a !important;
+}

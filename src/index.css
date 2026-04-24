@@ -1,0 +1,126 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+    --lb-gradient: radial-gradient(ellipse at 20% 80%, #d4a574 0%, #b88a5c 35%, #a67c52 55%, #f5f0e6 85%);
+  }
+
+  /* Night Mode - calm, relaxed, dark-blueish palette */
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --lb-gradient: radial-gradient(ellipse at 50% 100%, #1e293b 0%, #0f172a 60%, #020617 100%);
+
+    /* Backgrounds - deep navy/slate */
+    --lb-base: #0f172a;
+    --lb-surface: #1e293b;
+    --lb-surface-2: #334155;
+    --lb-border: rgba(148, 163, 184, 0.2);
+
+    /* Text - muted blue-gray */
+    --lb-text: #f1f5f9;
+    --lb-text-muted: #94a3b8;
+
+    /* Accents - calm blue */
+    --lb-accent-green: #3b82f6;
+    --lb-accent-green-dark: #2563eb;
+    --lb-neon-purple: #1e40af;
+    --lb-mid-purple: #3b82f6;
+
+    /* Actions */
+    --lb-action-orange: #3b82f6;
+    --lb-danger-brown: #dc2626;
+    --lb-hover: #334155;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  html,
+  body,
+  #root {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    @apply bg-lb-base text-lb-text font-body;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-image: var(--lb-gradient);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .lb-button {
+    @apply px-4 py-2 rounded-lg font-semibold transition-colors duration-200 flex items-center gap-2 cursor-pointer;
+  }
+
+  .lb-button-primary {
+    @apply lb-button bg-lb-accent-green hover:bg-lb-accent-green-dark text-lb-base text-lb-text;
+  }
+
+  .lb-button-secondary {
+    @apply lb-button bg-lb-accent-green/40 hover:bg-lb-accent-green/60 text-lb-text border border-lb-border;
+  }
+
+  .lb-button-ghost {
+    @apply lb-button bg-transparent hover:bg-white/5 text-lb-text-muted hover:text-lb-text;
+  }
+
+  .lb-input {
+    @apply bg-lb-surface-2 border border-lb-border rounded-lg px-3 py-2 text-lb-text placeholder-lb-text-muted
+           focus:outline-none focus:border-lb-neon-purple focus:ring-1 focus:ring-lb-neon-purple
+           transition-colors duration-150 w-full;
+  }
+
+  .lb-card {
+    @apply bg-lb-surface border border-lb-border rounded-xl p-4;
+  }
+
+  .lb-sidebar-item {
+    @apply flex items-center gap-2 px-3 py-1.5 rounded-md text-sm text-lb-text-muted
+           hover:bg-white/5 hover:text-lb-text cursor-pointer transition-colors duration-100
+           select-none;
+  }
+
+  .lb-sidebar-item-active {
+    @apply lb-sidebar-item bg-lb-accent-green/20 text-lb-text border-l-2 border-lb-accent-green;
+  }
+
+  /* LogBlock gradient accent line — top of sidebar */
+  .lb-sidebar-accent {
+    background: linear-gradient(90deg, #c49a6c, #a67c52, #c49a6c, #a67c52);
+    background-size: 300% 100%;
+    height: 2px;
+    width: 100%;
+    animation: lb-gradient-slide 4s linear infinite;
+  }
+
+  /* Gradient text — for headings/titles */
+  .lb-gradient-text {
+    background: linear-gradient(90deg, #c49a6c, #a67c52, #c49a6c, #a67c52);
+    background-size: 300% 100%;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: lb-gradient-slide 4s linear infinite;
+  }
+
+  /* CTA button — high-contrast action */
+  .lb-button-brand {
+    @apply lb-button bg-lb-accent-green hover:bg-lb-accent-green/90 text-black font-bold;
+  }
+}
+
+@keyframes lb-gradient-slide {
+  0%   { background-position: 0% 0%; }
+  100% { background-position: 100% 0%; }
+}
