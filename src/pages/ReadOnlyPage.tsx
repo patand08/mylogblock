@@ -1,20 +1,26 @@
-import { useEffect, useMemo, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
-import { useCreateBlockNote } from "@blocknote/react";
-import { BlockNoteSchema, defaultBlockSpecs, PartialBlock } from "@blocknote/core";
-import { BlockNoteView } from "@blocknote/mantine";
-import { fetchPages } from "@/lib/pageRepo";
-import { buildPageTree, PageTreeNode } from "@/lib/page-utils";
-import { sanitizeBlocks } from "@/lib/sanitizeBlocks";
-import { useTheme } from "@/context/ThemeContext";
-import ThemeToggle from "@/components/ui/ThemeToggle";
-import { Page } from "@/types";
-import clsx from "clsx";
-import "@blocknote/core/fonts/inter.css";
-import "@blocknote/mantine/style.css";
 import "@/components/editor/editor-theme.css";
+import ThemeToggle from "@/components/ui/ThemeToggle";
+import { useTheme } from "@/context/ThemeContext";
+import { buildPageTree, PageTreeNode } from "@/lib/page-utils";
+import { fetchPages } from "@/lib/pageRepo";
+import { sanitizeBlocks } from "@/lib/sanitizeBlocks";
+import { Page } from "@/types";
+import {
+  BlockNoteSchema,
+  defaultBlockSpecs,
+  PartialBlock,
+} from "@blocknote/core";
+import "@blocknote/core/fonts/inter.css";
+import { BlockNoteView } from "@blocknote/mantine";
+import "@blocknote/mantine/style.css";
+import { useCreateBlockNote } from "@blocknote/react";
+import clsx from "clsx";
+import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
-const readOnlySchema = BlockNoteSchema.create({ blockSpecs: { ...defaultBlockSpecs } });
+const readOnlySchema = BlockNoteSchema.create({
+  blockSpecs: { ...defaultBlockSpecs },
+});
 
 // Walk up to find the top-level ancestor of a page
 function findRootAncestor(allPages: Page[], pageId: string): Page {
@@ -67,7 +73,10 @@ function SubtreeItem({
         <button
           className={`w-4 h-4 flex-shrink-0 flex items-center justify-center rounded text-xs
             hover:bg-white/10 transition-colors ${!hasChildren ? "invisible" : ""}`}
-          onClick={(e) => { e.stopPropagation(); setExpanded((v) => !v); }}
+          onClick={(e) => {
+            e.stopPropagation();
+            setExpanded((v) => !v);
+          }}
         >
           {expanded ? "▾" : "▸"}
         </button>
@@ -77,7 +86,13 @@ function SubtreeItem({
       {hasChildren && expanded && (
         <div>
           {node.children.map((child) => (
-            <SubtreeItem key={child.page.id} node={child} activeId={activeId} onSelect={onSelect} depth={depth + 1} />
+            <SubtreeItem
+              key={child.page.id}
+              node={child}
+              activeId={activeId}
+              onSelect={onSelect}
+              depth={depth + 1}
+            />
           ))}
         </div>
       )}
@@ -85,7 +100,7 @@ function SubtreeItem({
   );
 }
 
-function ReadOnlyEditor({ body, theme }: { body: unknown; theme: "light" | "dark" }) {
+function ReadOnlyEditor({ body }: { body: unknown }) {
   const safeContent = useMemo(() => {
     if (!Array.isArray(body) || body.length === 0) return undefined;
     try {
@@ -130,7 +145,11 @@ export default function ReadOnlyPage() {
     fetchPages("local-workspace")
       .then((pages) => {
         const linked = pages.find((p) => p.id === pageId && !p.is_deleted);
-        if (!linked) { setNotFound(true); setLoading(false); return; }
+        if (!linked) {
+          setNotFound(true);
+          setLoading(false);
+          return;
+        }
         // Always root the tree at the top-level ancestor
         const ancestor = findRootAncestor(pages, linked.id);
         const subtree = collectSubtree(pages, ancestor.id);
@@ -167,19 +186,29 @@ export default function ReadOnlyPage() {
     <aside
       className={clsx(
         "flex-shrink-0 flex flex-col h-full bg-lb-surface border-r border-lb-border transition-all duration-200",
-        sidebarCollapsed ? "w-12" : "w-64"
+        sidebarCollapsed ? "w-12" : "w-64",
       )}
     >
       <div className="lb-sidebar-accent" />
       <div className="flex items-center justify-between px-3 py-3 border-b border-lb-border">
         {!sidebarCollapsed && (
           <div className="flex items-center gap-2 min-w-0">
-            <img src="/mylogblock-logo.png" alt="MyLogBlock logo" className="h-5 shrink-0" />
-            <span className="text-sm font-semibold font-display truncate lb-gradient-text">MyLogBlock</span>
+            <img
+              src="/mylogblock-logo.png"
+              alt="MyLogBlock logo"
+              className="h-5 shrink-0"
+            />
+            <span className="text-sm font-semibold font-display truncate lb-gradient-text">
+              MyLogBlock
+            </span>
           </div>
         )}
         {sidebarCollapsed && (
-          <img src="/mylogblock-logo.png" alt="MyLogBlock logo" className="h-5 mx-auto" />
+          <img
+            src="/mylogblock-logo.png"
+            alt="MyLogBlock logo"
+            className="h-5 mx-auto"
+          />
         )}
         <button
           aria-label={sidebarCollapsed ? "Expand sidebar" : "Collapse sidebar"}
@@ -190,16 +219,22 @@ export default function ReadOnlyPage() {
         </button>
       </div>
       <div className="flex-1 overflow-y-auto py-2 px-1">
-        {!sidebarCollapsed && tree.map((node) => (
-          <SubtreeItem
-            key={node.page.id}
-            node={node}
-            activeId={activePage?.id ?? ""}
-            onSelect={handleSelect}
-          />
-        ))}
+        {!sidebarCollapsed &&
+          tree.map((node) => (
+            <SubtreeItem
+              key={node.page.id}
+              node={node}
+              activeId={activePage?.id ?? ""}
+              onSelect={handleSelect}
+            />
+          ))}
       </div>
-      <div className={clsx("py-2 border-t border-lb-border flex", sidebarCollapsed ? "justify-center px-0" : "px-3")}>
+      <div
+        className={clsx(
+          "py-2 border-t border-lb-border flex",
+          sidebarCollapsed ? "justify-center px-0" : "px-3",
+        )}
+      >
         <ThemeToggle />
       </div>
     </aside>
@@ -215,13 +250,29 @@ export default function ReadOnlyPage() {
           aria-label="Toggle menu"
           className="p-1 rounded hover:bg-white/5 text-lb-text-muted hover:text-lb-text"
         >
-          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+          <svg
+            className="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M4 6h16M4 12h16M4 18h16"
+            />
           </svg>
         </button>
         <div className="flex items-center gap-2 flex-1 mx-2 min-w-0">
-          <img src="/mylogblock-logo.png" alt="MyLogBlock logo" className="w-5 h-5 shrink-0" />
-          <span className="text-sm font-semibold font-display lb-gradient-text truncate">MyLogBlock</span>
+          <img
+            src="/mylogblock-logo.png"
+            alt="MyLogBlock logo"
+            className="w-5 h-5 shrink-0"
+          />
+          <span className="text-sm font-semibold font-display lb-gradient-text truncate">
+            MyLogBlock
+          </span>
         </div>
         <ThemeToggle />
       </header>
@@ -280,18 +331,22 @@ export default function ReadOnlyPage() {
                   src={activePage.cover_image_url}
                   alt=""
                   className="w-full h-full object-cover"
-                  style={{ objectPosition: `center ${activePage.cover_image_position ?? 50}%` }}
+                  style={{
+                    objectPosition: `center ${activePage.cover_image_position ?? 50}%`,
+                  }}
                 />
               </div>
             )}
             <div className="px-3 sm:px-8 lg:px-16 py-6 sm:py-8 flex-1">
               <div className="flex items-center gap-3 mb-2">
-                {activePage.icon && <span className="text-4xl">{activePage.icon}</span>}
+                {activePage.icon && (
+                  <span className="text-4xl">{activePage.icon}</span>
+                )}
               </div>
               <h1 className="text-3xl sm:text-4xl font-bold font-display text-lb-text mb-6">
                 {activePage.title}
               </h1>
-              <ReadOnlyEditor body={activePage.body} theme={theme} />
+              <ReadOnlyEditor body={activePage.body} />
             </div>
           </div>
         )}
