@@ -1,6 +1,5 @@
 import "@/components/editor/editor-theme.css";
 import ThemeToggle from "@/components/ui/ThemeToggle";
-import { useTheme } from "@/context/ThemeContext";
 import { buildPageTree, PageTreeNode } from "@/lib/page-utils";
 import { fetchPages } from "@/lib/pageRepo";
 import { sanitizeBlocks } from "@/lib/sanitizeBlocks";
@@ -132,7 +131,6 @@ function ReadOnlyEditor({ body }: { body: unknown }) {
 export default function ReadOnlyPage() {
   const { pageId } = useParams<{ pageId: string }>();
   const navigate = useNavigate();
-  const { theme } = useTheme();
   const [, setAllPages] = useState<Page[]>([]);
   const [activePage, setActivePage] = useState<Page | null>(null);
   const [tree, setTree] = useState<PageTreeNode[]>([]);
