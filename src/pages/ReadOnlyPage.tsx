@@ -66,7 +66,7 @@ function SubtreeItem({
         style={{ paddingLeft: `${8 + depth * 16}px` }}
         className={`flex items-center gap-1.5 py-1 pr-2 rounded-md text-sm cursor-pointer select-none
           transition-colors duration-100
-          ${isActive ? "bg-lb-neon-purple/10 text-lb-text" : "text-lb-text-muted hover:bg-white/5 hover:text-lb-text"}`}
+          ${isActive ? "bg-lb-hover text-lb-text" : "text-lb-text-muted hover:bg-lb-hover/70 hover:text-lb-text"}`}
         onClick={() => onSelect(node.page)}
       >
         <button
@@ -344,7 +344,7 @@ export default function ReadOnlyPage() {
               <h1 className="text-3xl sm:text-4xl font-bold font-display text-lb-text mb-6">
                 {activePage.title}
               </h1>
-              <ReadOnlyEditor body={activePage.body} />
+              <ReadOnlyEditor key={activePage.id} body={activePage.body} />
             </div>
           </div>
         )}

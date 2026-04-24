@@ -47,9 +47,9 @@ export default function PageTreeItem({
         aria-expanded={hasChildren ? expanded : undefined}
         className={clsx(
           "group flex items-center gap-1 rounded-md px-2 py-1 text-sm cursor-pointer select-none",
-          "hover:bg-white/5 transition-colors duration-100",
-          isActive && "bg-lb-neon-purple/10 text-lb-text",
-          !isActive && "text-lb-text-muted hover:text-lb-text"
+          "transition-colors duration-100",
+          isActive && "bg-lb-hover text-lb-text",
+          !isActive && "text-lb-text-muted hover:bg-lb-hover/70 hover:text-lb-text"
         )}
         style={{ paddingLeft: `${8 + depth * 16}px` }}
         onMouseEnter={() => setHovered(true)}
