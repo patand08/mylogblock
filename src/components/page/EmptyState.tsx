@@ -22,14 +22,14 @@ export default function EmptyState({ onCreatePage }: Props) {
       <img
         src="/mylogblock-logo.png"
         alt="MyLogBlock"
-        className="w-16 h-16 opacity-80"
+        className="w-32 h-32 opacity-80"
       />
 
       <div className="text-center">
         <h2 className="text-3xl font-brand lb-gradient-text mb-2">
           MyLogBlock
         </h2>
-        <p className="text-sm font-body text-lb-accent-green/80 mb-4 tracking-widest uppercase">
+        <p className="text-sm font-body text-emerald-500/85 mb-4 tracking-widest uppercase">
            Block based note taker
         </p>
         <p className="text-lb-text-muted max-w-sm text-sm">
@@ -40,8 +40,8 @@ export default function EmptyState({ onCreatePage }: Props) {
       <button
         data-testid="create-first-page-btn"
         onClick={onCreatePage}
-        className="px-6 py-3 rounded-lg font-bold font-display bg-lb-accent-green hover:bg-lb-accent-green/90
-                   text-black transition-colors flex items-center gap-2"
+        className="px-6 py-3 rounded-lg font-bold font-display bg-emerald-600 hover:bg-emerald-500
+                   text-white transition-colors flex items-center gap-2"
       >
         <span>+</span>
         <span>Create page</span>

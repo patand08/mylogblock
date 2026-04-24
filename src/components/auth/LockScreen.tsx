@@ -46,7 +46,7 @@ export default function LockScreen({ onUnlock }: Props) {
       <div className="relative z-10 w-full max-w-sm px-8 flex flex-col items-center gap-8">
         {/* Logo */}
         <div className="flex flex-col items-center gap-3">
-          <img src="/mylogblock-logo.png" alt="MyLogBlock" className="w-14 h-14 opacity-90" />
+          <img src="/mylogblock-logo.png" alt="MyLogBlock" className="w-28 h-28 opacity-90" />
           <h1 className="text-2xl font-brand lb-gradient-text">MyLogBlock</h1>
           <p className="text-xs text-lb-text-muted tracking-widest uppercase font-body">
             Block based note taker
@@ -70,6 +70,7 @@ export default function LockScreen({ onUnlock }: Props) {
                 onChange={(e) => { setPassword(e.target.value); setError(false); }}
                 placeholder="••••••••"
                 className={`lb-input text-center tracking-[0.3em] text-lg font-display pr-10
+                  focus:border-emerald-500 focus:ring-emerald-500/35
                   ${error ? "border-red-500/60 focus:border-red-500 focus:ring-red-500/30" : ""}`}
               />
               <button
@@ -100,7 +101,7 @@ export default function LockScreen({ onUnlock }: Props) {
           <button
             type="submit"
             disabled={loading || !password}
-            className="px-4 py-2 rounded-lg font-bold bg-lb-action-orange hover:bg-lb-action-orange/90 text-white disabled:opacity-40 disabled:cursor-not-allowed w-full justify-center flex items-center justify-center gap-2"
+            className="px-4 py-2 rounded-lg font-bold bg-emerald-600 hover:bg-emerald-500 text-white disabled:opacity-40 disabled:cursor-not-allowed w-full flex items-center justify-center gap-2"
           >
             {loading ? (
               <span className="opacity-60">Verifying…</span>
