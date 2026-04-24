@@ -1,4 +1,5 @@
 import "@/components/editor/editor-theme.css";
+import PageContentSkeleton from "@/components/page/PageContentSkeleton";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { buildPageTree, PageTreeNode } from "@/lib/page-utils";
 import { fetchPages } from "@/lib/pageRepo";
@@ -138,6 +139,7 @@ export default function ReadOnlyPage() {
   const [notFound, setNotFound] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isPageTransitioning, setIsPageTransitioning] = useState(false);
 
   useEffect(() => {
     fetchPages("local-workspace")
@@ -158,7 +160,14 @@ export default function ReadOnlyPage() {
       .finally(() => setLoading(false));
   }, [pageId]);
 
+  useEffect(() => {
+    if (!isPageTransitioning) return;
+    const timeout = window.setTimeout(() => setIsPageTransitioning(false), 180);
+    return () => window.clearTimeout(timeout);
+  }, [isPageTransitioning, activePage?.id]);
+
   function handleSelect(page: Page) {
+    setIsPageTransitioning(true);
     setActivePage(page);
     navigate(`/page/${page.id}`, { replace: true });
   }
@@ -320,7 +329,9 @@ export default function ReadOnlyPage() {
 
       {/* Content */}
       <main className="flex-1 overflow-hidden">
-        {activePage && (
+        {activePage && isPageTransitioning ? (
+          <PageContentSkeleton />
+        ) : activePage && (
           <div className="flex flex-col h-full overflow-y-auto">
             {/* Cover */}
             {activePage.cover_image_url && (

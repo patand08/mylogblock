@@ -6,6 +6,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import SortablePageList from "@/components/sidebar/SortablePageList";
 import EditorPage from "@/components/page/EditorPage";
 import EmptyState from "@/components/page/EmptyState";
+import PageContentSkeleton from "@/components/page/PageContentSkeleton";
 import ConfirmModal from "@/components/ui/ConfirmModal";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
@@ -17,6 +18,7 @@ export default function WorkspacePage() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
   const [pendingPage, setPendingPage] = useState<Page | null>(null);
+  const [isPageTransitioning, setIsPageTransitioning] = useState(false);
 
   // On direct URL load (/page/:pageId): wait for pages to load, then activate
   useEffect(() => {
@@ -31,6 +33,12 @@ export default function WorkspacePage() {
     }
   }, [pageId, pages, loading, activePageId, setActivePageId, navigate]);
 
+  useEffect(() => {
+    if (!isPageTransitioning) return;
+    const timeout = window.setTimeout(() => setIsPageTransitioning(false), 180);
+    return () => window.clearTimeout(timeout);
+  }, [isPageTransitioning, activePageId]);
+
   // Check if currently viewing a just-created page (before state propagates)
   // Active page: use pending page (just created) or find from pages state
   const activePage = pendingPage
@@ -44,11 +52,13 @@ export default function WorkspacePage() {
     : null;
 
   function handleSelectPage(page: Page) {
+    setIsPageTransitioning(true);
     setActivePageId(page.id);
     navigate(`/page/${page.id}`);
   }
 
   function handleCreatePage(parentId?: string) {
+    setIsPageTransitioning(true);
     const page = createPage({ title: "Untitled", parent_id: parentId ?? null });
     setPendingPage(page);
     setActivePageId(page.id);
@@ -153,7 +163,9 @@ export default function WorkspacePage() {
       </div>
 
       <main className="flex-1 overflow-hidden">
-        {activePage ? (
+        {activePage && isPageTransitioning ? (
+          <PageContentSkeleton />
+        ) : activePage ? (
           <EditorPage
             page={activePage}
             allPages={pages}
