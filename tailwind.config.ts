@@ -21,9 +21,10 @@ export default {
         "lb-hover": "var(--lb-hover, #d4c9b5)",
       },
       fontFamily: {
-        display: ["Space Grotesk", "system-ui", "sans-serif"],
-        body: ["Inter", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "Fira Code", "ui-monospace", "monospace"],
+        display: ["Commissioner", "system-ui", "sans-serif"],
+        body: ["Commissioner", "system-ui", "sans-serif"],
+        brand: ['"Coiny"', "cursive", "sans-serif"],
+        mono: ['"Google Sans Code"', "ui-monospace", "monospace"],
       },
     },
   },

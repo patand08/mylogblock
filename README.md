@@ -75,6 +75,7 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 | Drag & drop    | dnd-kit                          |
 | Backend        | Supabase (Postgres + Storage)    |
 | Styling        | Tailwind CSS                     |
+| Typography     | Commissioner (UI), [Coiny](https://fonts.google.com/specimen/Coiny?categoryFilters=Feeling:%2FExpressive%2FCute) (brand), [Google Sans Code](https://fonts.google.com/specimen/Google+Sans+Code) (code) via Google Fonts |
 | Testing        | Vitest + Testing Library         |
 | AI Integration | Model Context Protocol (MCP) SDK |
 | Deploy         | Vercel                           |

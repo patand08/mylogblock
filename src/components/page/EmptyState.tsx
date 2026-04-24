@@ -26,7 +26,7 @@ export default function EmptyState({ onCreatePage }: Props) {
       />
 
       <div className="text-center">
-        <h2 className="text-3xl font-bold font-display lb-gradient-text mb-2">
+        <h2 className="text-3xl font-brand lb-gradient-text mb-2">
           MyLogBlock
         </h2>
         <p className="text-sm font-body text-lb-accent-green/80 mb-4 tracking-widest uppercase">

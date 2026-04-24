@@ -207,7 +207,7 @@ export default function ReadOnlyPage() {
               alt="MyLogBlock logo"
               className="h-5 shrink-0"
             />
-            <span className="text-sm font-semibold font-display truncate lb-gradient-text">
+            <span className="text-sm font-brand truncate lb-gradient-text">
               MyLogBlock
             </span>
           </div>
@@ -280,7 +280,7 @@ export default function ReadOnlyPage() {
             alt="MyLogBlock logo"
             className="w-5 h-5 shrink-0"
           />
-          <span className="text-sm font-semibold font-display lb-gradient-text truncate">
+          <span className="text-sm font-brand lb-gradient-text truncate">
             MyLogBlock
           </span>
         </div>
@@ -349,7 +349,12 @@ export default function ReadOnlyPage() {
                 />
               </div>
             )}
-            <div className="px-3 sm:px-8 lg:px-16 py-6 sm:py-8 flex-1">
+            <div
+              className={clsx(
+                "px-3 sm:px-8 lg:px-16 flex-1",
+                activePage.cover_image_url ? "py-6 sm:py-8" : "pt-12 sm:pt-20 pb-6 sm:pb-8",
+              )}
+            >
               <div className="flex items-center gap-3 mb-6">
                 {activePage.icon && (
                   <span className="text-4xl leading-none">{activePage.icon}</span>

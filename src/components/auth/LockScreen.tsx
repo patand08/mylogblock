@@ -47,7 +47,7 @@ export default function LockScreen({ onUnlock }: Props) {
         {/* Logo */}
         <div className="flex flex-col items-center gap-3">
           <img src="/mylogblock-logo.png" alt="MyLogBlock" className="w-14 h-14 opacity-90" />
-          <h1 className="text-2xl font-bold font-display lb-gradient-text">MyLogBlock</h1>
+          <h1 className="text-2xl font-brand lb-gradient-text">MyLogBlock</h1>
           <p className="text-xs text-lb-text-muted tracking-widest uppercase font-body">
             Block based note taker
           </p>

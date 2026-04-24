@@ -30,7 +30,7 @@ div[data-color-scheme="light"] .bn-container {
   --bn-colors-highlights-gray-background: #ebe5d5;
   /* Highlights text - sepia */
   --bn-colors-highlights-gray-text: #8b7d6b;
-  --bn-font-family: "Inter", system-ui, sans-serif;
+  --bn-font-family: "Commissioner", system-ui, sans-serif;
 }
 
 /* Slash command menu styling */
@@ -79,7 +79,7 @@ div[data-color-scheme="light"] .bn-container {
   background: #ebe5d5 !important;
   border: 1px solid rgba(196, 154, 108, 0.3) !important;
   border-radius: 6px !important;
-  font-family: "JetBrains Mono", monospace !important;
+  font-family: "Google Sans Code", ui-monospace, monospace !important;
 }
 .bn-editor pre code {
   color: #4a3f35 !important;
@@ -89,7 +89,7 @@ div[data-color-scheme="light"] .bn-container {
 .bn-editor h1,
 .bn-editor h2,
 .bn-editor h3 {
-  font-family: "Space Grotesk", system-ui, sans-serif !important;
+  font-family: "Commissioner", system-ui, sans-serif !important;
   color: #4a3f35 !important;
 }
 
@@ -119,12 +119,34 @@ div[data-color-scheme="light"] .bn-container {
   accent-color: #c49a6c;
 }
 
-/* Blockquote */
+/* Quote blocks: Google Sans Code (matches code styling) */
+.bn-editor [data-content-type="quote"],
+.bn-editor [data-content-type="quote"] blockquote,
+.bn-editor [data-content-type="quote"] p,
+.bn-editor [data-content-type="quote"] .bn-inline-content,
+.bn-editor blockquote,
+.bn-editor blockquote p,
+.bn-editor blockquote .bn-inline-content {
+  font-family: "Google Sans Code", ui-monospace, monospace !important;
+}
 .bn-editor blockquote {
   border-left: 3px solid rgba(196, 154, 108, 0.5) !important;
   background: rgba(235, 229, 213, 0.3) !important;
   padding-left: 12px !important;
   color: #8b7d6b !important;
+}
+
+/* Code: monospace (inline + fenced) */
+.bn-editor code {
+  font-family: "Google Sans Code", ui-monospace, monospace !important;
+  font-size: 0.9em;
+}
+.bn-editor pre {
+  font-family: "Google Sans Code", ui-monospace, monospace !important;
+  font-size: 0.875rem;
+}
+.bn-editor pre code {
+  font-size: inherit !important;
 }
 
 /* Table styling */

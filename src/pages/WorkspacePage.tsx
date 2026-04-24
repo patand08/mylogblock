@@ -108,7 +108,7 @@ export default function WorkspacePage() {
         </button>
         <div className="flex items-center gap-2 flex-1 mx-2 min-w-0">
           <img src="/mylogblock-logo.png" alt="MyLogBlock logo" className="w-5 h-5 shrink-0" />
-          <span className="text-sm font-semibold font-display lb-gradient-text truncate">MyLogBlock</span>
+          <span className="text-sm font-brand lb-gradient-text truncate">MyLogBlock</span>
         </div>
         <ThemeToggle />
       </header>

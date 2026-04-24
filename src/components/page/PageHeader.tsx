@@ -146,7 +146,7 @@ export default function PageHeader({ page, crumbs, onNavigate, onUpdate }: Props
         onChange={handleCoverFileChange}
       />
 
-      <div className={clsx("px-4 sm:px-8 lg:px-16 pb-4", page.cover_image_url ? "pt-3" : "pt-6 sm:pt-12")}>
+      <div className={clsx("px-4 sm:px-8 lg:px-16 pb-4", page.cover_image_url ? "pt-3" : "pt-10 sm:pt-16 lg:pt-20")}>
         {/* Breadcrumb */}
         <div className="mb-4">
           <Breadcrumb

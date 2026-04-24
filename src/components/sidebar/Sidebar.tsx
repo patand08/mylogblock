@@ -1,5 +1,5 @@
-import clsx from "clsx";
 import ThemeToggle from "@/components/ui/ThemeToggle";
+import clsx from "clsx";
 
 interface Props {
   children?: React.ReactNode;
@@ -7,7 +7,11 @@ interface Props {
   onToggleCollapse?: () => void;
 }
 
-export default function Sidebar({ children, collapsed = false, onToggleCollapse }: Props) {
+export default function Sidebar({
+  children,
+  collapsed = false,
+  onToggleCollapse,
+}: Props) {
   return (
     <aside
       data-testid="sidebar"
@@ -31,7 +35,7 @@ export default function Sidebar({ children, collapsed = false, onToggleCollapse 
               alt="MyLogBlock logo"
               className="w-5 h-5 shrink-0"
             />
-            <span className="text-sm font-semibold font-display truncate lb-gradient-text">
+            <span className="text-md font-brand truncate lb-gradient-text">
               MyLogBlock
             </span>
           </div>
@@ -53,12 +57,20 @@ export default function Sidebar({ children, collapsed = false, onToggleCollapse 
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-y-auto py-2" data-testid="sidebar-content">
+      <div
+        className="flex-1 overflow-y-auto py-2"
+        data-testid="sidebar-content"
+      >
         {!collapsed && children}
       </div>
 
       {/* Night mode toggle - bottom of sidebar (always shown) */}
-      <div className={clsx("py-2 border-t border-lb-border flex", collapsed ? "justify-center px-0" : "px-3")}>
+      <div
+        className={clsx(
+          "py-2 border-t border-lb-border flex",
+          collapsed ? "justify-center px-0" : "px-3"
+        )}
+      >
         <ThemeToggle />
       </div>
     </aside>
