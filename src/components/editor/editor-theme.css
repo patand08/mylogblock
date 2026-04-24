@@ -75,15 +75,33 @@ div[data-color-scheme="light"] .bn-container {
   background: rgba(196, 154, 108, 0.3);
 }
 
-/* Code block */
+/* BlockNote code block wrapper — default rgb(22,22,22) shows as black bands around <pre> */
+.bn-block-content[data-content-type="codeBlock"] {
+  background-color: #f2f3f5 !important;
+  color: #2c2f33 !important;
+  border-radius: 4px !important;
+}
+.bn-block-content[data-content-type="codeBlock"] > pre {
+  margin: 0 !important;
+  padding: 12px 14px !important;
+}
+.bn-block-content[data-content-type="codeBlock"] > div > select {
+  color: #5c5f66 !important;
+}
+
+/* Code block — Discord-style light */
 .bn-editor pre {
-  background: #ebe5d5 !important;
-  border: 1px solid rgba(196, 154, 108, 0.3) !important;
-  border-radius: 6px !important;
-  font-family: "Google Sans Code", ui-monospace, monospace !important;
+  background: #f2f3f5 !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 12px 14px !important;
+  margin: 0 !important;
+  font-family: Consolas, "Liberation Mono", Menlo, Monaco, "Courier New", monospace !important;
+  line-height: 1.45 !important;
 }
 .bn-editor pre code {
-  color: #4a3f35 !important;
+  color: #2c2f33 !important;
+  background: transparent !important;
 }
 
 /* Heading colors */
@@ -144,11 +162,11 @@ div[data-color-scheme="light"] .bn-container {
   font-size: 0.9em;
 }
 .bn-editor pre {
-  font-family: "Google Sans Code", ui-monospace, monospace !important;
   font-size: 0.875rem;
 }
 .bn-editor pre code {
   font-size: inherit !important;
+  font-family: inherit !important;
 }
 
 /* Table styling */
@@ -279,13 +297,28 @@ div[data-color-scheme="light"] .bn-container {
   background: rgba(59, 130, 246, 0.3);
 }
 
-/* Night Mode - Code block */
+/* Night Mode - Code block (Discord-style: inset dark strip, no blue frame) */
+:root[data-theme="dark"] .bn-block-content[data-content-type="codeBlock"] {
+  background-color: #1e1f22 !important;
+  color: #dbdee1 !important;
+}
+:root[data-theme="dark"] .bn-block-content[data-content-type="codeBlock"] > div > select {
+  color: #b5bac1 !important;
+}
+
 :root[data-theme="dark"] .bn-editor pre {
-  background: #2b2d31 !important;
-  border: 1px solid rgba(59, 130, 246, 0.3) !important;
+  background: #1e1f22 !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 12px 14px !important;
+  margin: 0 !important;
+  font-family: Consolas, "Liberation Mono", Menlo, Monaco, "Courier New", monospace !important;
+  line-height: 1.45 !important;
 }
 :root[data-theme="dark"] .bn-editor pre code {
-  color: #f2f3f5 !important;
+  color: #dbdee1 !important;
+  background: transparent !important;
+  font-family: inherit !important;
 }
 
 /* Night Mode - Headings */
