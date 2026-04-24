@@ -18,6 +18,8 @@ import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+const PAGE_TRANSITION_MS = 320;
+
 const readOnlySchema = BlockNoteSchema.create({
   blockSpecs: { ...defaultBlockSpecs },
 });
@@ -162,7 +164,7 @@ export default function ReadOnlyPage() {
 
   useEffect(() => {
     if (!isPageTransitioning) return;
-    const timeout = window.setTimeout(() => setIsPageTransitioning(false), 180);
+    const timeout = window.setTimeout(() => setIsPageTransitioning(false), PAGE_TRANSITION_MS);
     return () => window.clearTimeout(timeout);
   }, [isPageTransitioning, activePage?.id]);
 

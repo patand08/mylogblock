@@ -10,6 +10,8 @@ import PageContentSkeleton from "@/components/page/PageContentSkeleton";
 import ConfirmModal from "@/components/ui/ConfirmModal";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 
+const PAGE_TRANSITION_MS = 320;
+
 export default function WorkspacePage() {
   const { pageId } = useParams<{ pageId?: string }>();
   const navigate = useNavigate();
@@ -35,7 +37,7 @@ export default function WorkspacePage() {
 
   useEffect(() => {
     if (!isPageTransitioning) return;
-    const timeout = window.setTimeout(() => setIsPageTransitioning(false), 180);
+    const timeout = window.setTimeout(() => setIsPageTransitioning(false), PAGE_TRANSITION_MS);
     return () => window.clearTimeout(timeout);
   }, [isPageTransitioning, activePageId]);
 
