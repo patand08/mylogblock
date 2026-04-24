@@ -3,6 +3,8 @@ import clsx from "clsx";
 import { Page } from "@/types";
 import { PageTreeNode } from "@/lib/page-utils";
 import IconButton from "@/components/ui/IconButton";
+import { useSortable } from "@dnd-kit/sortable";
+import { CSS } from "@dnd-kit/utilities";
 
 interface Props {
   node: PageTreeNode;
@@ -23,6 +25,9 @@ export default function PageTreeItem({
   onDelete,
   onRename,
 }: Props) {
+  const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
+    useSortable({ id: node.page.id });
+  const { role: _sortableRole, ...sortableAttributes } = attributes;
   const [expanded, setExpanded] = useState(true);
   const [hovered, setHovered] = useState(false);
   const [renaming, setRenaming] = useState(false);
@@ -38,15 +43,24 @@ export default function PageTreeItem({
   }
 
   return (
-    <div>
+    <div
+      ref={setNodeRef}
+      style={{
+        transform: CSS.Transform.toString(transform),
+        transition,
+        opacity: isDragging ? 0.5 : 1,
+      }}
+    >
       {/* Row */}
       <div
         data-testid={`page-item-${node.page.id}`}
         role="treeitem"
         aria-selected={isActive}
         aria-expanded={hasChildren ? expanded : undefined}
+        {...sortableAttributes}
+        {...listeners}
         className={clsx(
-          "group flex items-center gap-1 rounded-md px-2 py-1 text-sm cursor-pointer select-none",
+          "group flex items-center gap-1 rounded-md px-2 py-1 text-sm cursor-pointer select-none touch-none",
           "transition-colors duration-100",
           isActive && "bg-lb-hover text-lb-text",
           !isActive && "text-lb-text-muted hover:bg-lb-hover/70 hover:text-lb-text"

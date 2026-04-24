@@ -25,18 +25,20 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 ### Pages
 
 - **Infinite nesting** — pages can have sub-pages and sub-sub-pages
-- **Drag-and-drop reorder** — sidebar tree reordering via dnd-kit
+- **Tree drag-and-drop** — reorder pages at any level, move across branches, nest (indent) and outdent pages via horizontal drag
 - **Page icons** — emoji picker per page (header + sidebar)
 - **Cover images** — upload, reposition vertically, and remove cover photos
 - **Breadcrumb trail** — clickable hierarchy navigation
 - **Sidebar search** — real-time filter by page title
 - **Inline rename** — click-to-edit page titles in the sidebar
+- **Drag hint overlay** — contextual hint during drag (`reorder`, `make child`, `move out`) with reserved layout space to avoid flicker
 
 ### Sharing & Read-Only Mode
 
 - **Public read-only view** — any page subtree accessible via `/page/:id` without authentication
 - **Custom slug URLs** — assign a short slug to any page, accessible at `/s/:slug`
 - **Read-only editor** — full block rendering with no edit interactions, same dark/light theme
+- **Stable read-only navigation** — sidebar page switches update title + content reliably (editor remount on page change)
 
 ### UI & UX
 
@@ -44,6 +46,8 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 - **Responsive layout** — mobile drawer menu with hamburger navigation, desktop sidebar with collapse
 - **Lock screen** — optional access code to protect the workspace (env-configured)
 - **Warm "old paper" light theme + navy dark theme** — custom BlockNote color overrides
+- **Active page highlight** — persistent selected-state contrast in sidebar for both light/dark themes
+- **Page transition skeletons** — animated shimmer skeleton for content transitions (workspace + read-only)
 
 ### MCP Server (AI Integration)
 

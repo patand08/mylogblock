@@ -16,9 +16,17 @@ vi.mock("@dnd-kit/sortable", () => ({
   SortableContext: ({ children }: any) => <>{children}</>,
   sortableKeyboardCoordinates: vi.fn(),
   verticalListSortingStrategy: vi.fn(),
+  useSortable: vi.fn(() => ({
+    attributes: {},
+    listeners: {},
+    setNodeRef: vi.fn(),
+    transform: null,
+    transition: undefined,
+    isDragging: false,
+  })),
 }));
-vi.mock("./SortablePageItem", () => ({
-  default: ({ node }: any) => <div role="treeitem">{node.page.title}</div>,
+vi.mock("@dnd-kit/utilities", () => ({
+  CSS: { Transform: { toString: () => undefined } },
 }));
 
 function makePage(overrides: Partial<Page> = {}): Page {

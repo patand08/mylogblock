@@ -7,6 +7,8 @@ import {
   useSensor,
   useSensors,
   DragEndEvent,
+  DragMoveEvent,
+  DragStartEvent,
 } from "@dnd-kit/core";
 import {
   SortableContext,
@@ -15,7 +17,7 @@ import {
 } from "@dnd-kit/sortable";
 import { Page } from "@/types";
 import { PageTreeNode } from "@/lib/page-utils";
-import SortablePageItem from "./SortablePageItem";
+import PageTreeItem from "./PageTreeItem";
 import Button from "@/components/ui/Button";
 
 interface Props {
@@ -42,17 +44,33 @@ export default function SortablePageList({
   onReorderPages,
 }: Props) {
   const [search, setSearch] = useState("");
+  const [dragHint, setDragHint] = useState<string | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 4 } }),
     useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates })
   );
 
+  function getDragHint(deltaX: number): string {
+    if (deltaX > 24) return "Drop to make child";
+    if (deltaX < -24) return "Drop to move one level out";
+    return "Drop to reorder at same level";
+  }
+
+  function handleDragStart(_: DragStartEvent) {
+    setDragHint("Drop to reorder at same level");
+  }
+
+  function handleDragMove(event: DragMoveEvent) {
+    setDragHint(getDragHint(event.delta.x));
+  }
+
   function handleDragEnd(event: DragEndEvent) {
     const { active, over } = event;
     if (over && active.id !== over.id) {
       onReorderPages(String(active.id), String(over.id), event.delta.x);
     }
+    setDragHint(null);
   }
 
   const query = search.trim().toLowerCase();
@@ -62,7 +80,7 @@ export default function SortablePageList({
         .map((n) => ({ ...n, children: [] }))
     : tree;
 
-  const rootIds = visibleTree.map((n) => n.page.id);
+  const sortableIds = flattenTree(visibleTree).map((n) => n.page.id);
 
   return (
     <div data-testid="page-list" role="tree" aria-label="Pages">
@@ -78,6 +96,14 @@ export default function SortablePageList({
                      text-lb-text placeholder-lb-text-muted/50 outline-none focus:border-lb-neon-purple/50"
         />
       </div>
+      <p
+        className="px-3 pb-2 text-[11px] min-h-[20px]"
+        aria-live="polite"
+      >
+        <span className={dragHint ? "text-lb-text-muted" : "invisible"}>
+          {dragHint ?? "Drop to reorder at same level"}
+        </span>
+      </p>
 
       {visibleTree.length === 0 && query ? (
         <p data-testid="search-no-results" className="text-xs text-lb-text-muted px-3 py-2">
@@ -89,11 +115,13 @@ export default function SortablePageList({
         <DndContext
           sensors={sensors}
           collisionDetection={closestCenter}
+          onDragStart={handleDragStart}
+          onDragMove={handleDragMove}
           onDragEnd={handleDragEnd}
         >
-          <SortableContext items={rootIds} strategy={verticalListSortingStrategy}>
+          <SortableContext items={sortableIds} strategy={verticalListSortingStrategy}>
             {visibleTree.map((node) => (
-              <SortablePageItem
+              <PageTreeItem
                 key={node.page.id}
                 node={node}
                 activePageId={activePageId}

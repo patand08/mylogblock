@@ -4,6 +4,20 @@ import PageTreeItem from "./PageTreeItem";
 import { PageTreeNode } from "@/lib/page-utils";
 import { Page } from "@/types";
 
+vi.mock("@dnd-kit/sortable", () => ({
+  useSortable: vi.fn(() => ({
+    attributes: {},
+    listeners: {},
+    setNodeRef: vi.fn(),
+    transform: null,
+    transition: undefined,
+    isDragging: false,
+  })),
+}));
+vi.mock("@dnd-kit/utilities", () => ({
+  CSS: { Transform: { toString: () => undefined } },
+}));
+
 function makePage(overrides: Partial<Page> = {}): Page {
   return {
     id: "p1", workspace_id: "ws1", parent_id: null, title: "Test Page",
