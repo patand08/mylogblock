@@ -2,7 +2,9 @@ import { describe, it, expect, beforeEach, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import WorkspacePage from "./WorkspacePage";
 import { BrowserRouter } from "react-router-dom";
+import { QueryClientProvider } from "@tanstack/react-query";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { createTestQueryClient } from "@/test/testQueryClient";
 
 vi.mock("twemoji", () => ({
   default: { parse: vi.fn() },
@@ -99,12 +101,15 @@ describe("WorkspacePage - Mobile Menu", () => {
   });
 
   function renderPage() {
+    const queryClient = createTestQueryClient();
     return render(
-      <BrowserRouter>
-        <ThemeProvider>
-          <WorkspacePage />
-        </ThemeProvider>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <ThemeProvider>
+            <WorkspacePage />
+          </ThemeProvider>
+        </BrowserRouter>
+      </QueryClientProvider>
     );
   }
 

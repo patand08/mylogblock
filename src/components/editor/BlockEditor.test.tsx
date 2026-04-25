@@ -4,6 +4,11 @@ import { describe, it, expect, vi } from "vitest";
 vi.mock("@/lib/storageRepo", () => ({
   uploadBlockImage: vi.fn().mockResolvedValue("https://cdn.example.com/img.jpg"),
 }));
+vi.mock("@/lib/pageQueries", () => ({
+  useUploadBlockImageMutation: () => ({
+    mutateAsync: vi.fn().mockResolvedValue("https://cdn.example.com/img.jpg"),
+  }),
+}));
 
 vi.mock("@blocknote/react", () => ({
   useCreateBlockNote: vi.fn(() => ({ document: [] })),

@@ -1,28 +1,20 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { fetchPageBySlug } from "@/lib/pageRepo";
+import { usePageBySlugQuery } from "@/lib/pageQueries";
 
 export default function SlugRedirectPage() {
   const { slug } = useParams<{ slug: string }>();
   const navigate = useNavigate();
-  const [notFound, setNotFound] = useState(false);
+  const { data: page, isLoading, isError } = usePageBySlugQuery(slug);
 
   useEffect(() => {
-    if (!slug) { setNotFound(true); return; }
+    if (page) {
+      // Replace current history entry so back button doesn't loop
+      navigate(`/page/${page.id}`, { replace: true });
+    }
+  }, [page, navigate]);
 
-    fetchPageBySlug(slug)
-      .then((page) => {
-        if (page) {
-          // Replace current history entry so back button doesn't loop
-          navigate(`/page/${page.id}`, { replace: true });
-        } else {
-          setNotFound(true);
-        }
-      })
-      .catch(() => setNotFound(true));
-  }, [slug, navigate]);
-
-  if (notFound) {
+  if (!slug || isError || (!isLoading && !page)) {
     return (
       <div className="h-screen flex flex-col items-center justify-center gap-4 bg-lb-base text-lb-text-muted">
         <span className="text-4xl">🔍</span>

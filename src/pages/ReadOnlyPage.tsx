@@ -2,7 +2,7 @@ import "@/components/editor/editor-theme.css";
 import PageContentSkeleton from "@/components/page/PageContentSkeleton";
 import ThemeToggle from "@/components/ui/ThemeToggle";
 import { buildPageTree, getPageBreadcrumbs, PageTreeNode } from "@/lib/page-utils";
-import { fetchPages } from "@/lib/pageRepo";
+import { useWorkspacePagesQuery } from "@/lib/pageQueries";
 import { sanitizeBlocks } from "@/lib/sanitizeBlocks";
 import { Page } from "@/types";
 import {
@@ -151,33 +151,38 @@ function ReadOnlyEditor({ body }: { body: unknown }) {
 export default function ReadOnlyPage() {
   const { pageId } = useParams<{ pageId: string }>();
   const navigate = useNavigate();
-  const [allPages, setAllPages] = useState<Page[]>([]);
-  const [activePage, setActivePage] = useState<Page | null>(null);
-  const [tree, setTree] = useState<PageTreeNode[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [notFound, setNotFound] = useState(false);
+  const { data: pages = [], isLoading } = useWorkspacePagesQuery("local-workspace");
+  const [activePageId, setActivePageId] = useState<string | null>(null);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [isPageTransitioning, setIsPageTransitioning] = useState(false);
 
+  const linkedPage = useMemo(
+    () => pages.find((p) => p.id === pageId && !p.is_deleted) ?? null,
+    [pages, pageId]
+  );
+
+  const allPages = useMemo(() => {
+    if (!linkedPage) return [];
+    // Always root the tree at the top-level ancestor
+    const ancestor = findRootAncestor(pages, linkedPage.id);
+    return collectSubtree(pages, ancestor.id);
+  }, [pages, linkedPage]);
+
+  const tree = useMemo<PageTreeNode[]>(() => buildPageTree(allPages), [allPages]);
+
+  const activePage = useMemo(
+    () =>
+      (activePageId ? allPages.find((p) => p.id === activePageId) ?? null : null) ??
+      (linkedPage && allPages.some((p) => p.id === linkedPage.id) ? linkedPage : null),
+    [activePageId, allPages, linkedPage]
+  );
+
   useEffect(() => {
-    fetchPages("local-workspace")
-      .then((pages) => {
-        const linked = pages.find((p) => p.id === pageId && !p.is_deleted);
-        if (!linked) {
-          setNotFound(true);
-          setLoading(false);
-          return;
-        }
-        // Always root the tree at the top-level ancestor
-        const ancestor = findRootAncestor(pages, linked.id);
-        const subtree = collectSubtree(pages, ancestor.id);
-        setAllPages(subtree);
-        setTree(buildPageTree(subtree));
-        setActivePage(linked); // open the specifically linked page
-      })
-      .finally(() => setLoading(false));
-  }, [pageId]);
+    if (linkedPage) {
+      setActivePageId(linkedPage.id);
+    }
+  }, [linkedPage]);
 
   useEffect(() => {
     if (!isPageTransitioning) return;
@@ -187,11 +192,11 @@ export default function ReadOnlyPage() {
 
   function handleSelect(page: Page) {
     setIsPageTransitioning(true);
-    setActivePage(page);
+    setActivePageId(page.id);
     navigate(`/page/${page.id}`, { replace: true });
   }
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div className="h-screen flex items-center justify-center bg-lb-base">
         <div className="w-5 h-5 rounded-full border-2 border-lb-neon-purple border-t-transparent animate-spin" />
@@ -199,7 +204,7 @@ export default function ReadOnlyPage() {
     );
   }
 
-  if (notFound) {
+  if (!isLoading && !linkedPage) {
     return (
       <div className="h-screen flex flex-col items-center justify-center gap-4 bg-lb-base text-lb-text-muted">
         <span className="text-4xl">🔍</span>

@@ -11,7 +11,7 @@ import {
 import { BlockNoteSchema, defaultBlockSpecs } from "@blocknote/core";
 import { BlockNoteView } from "@blocknote/mantine";
 import { PartialBlock } from "@blocknote/core";
-import { uploadBlockImage } from "@/lib/storageRepo";
+import { useUploadBlockImageMutation } from "@/lib/pageQueries";
 import { sanitizeBlocks } from "@/lib/sanitizeBlocks";
 import { DuplicateBlockItem } from "./DuplicateBlockItem";
 import { HtmlBlock } from "./HtmlBlock";
@@ -57,6 +57,7 @@ class EditorErrorBoundary extends Component<
 }
 
 function BlockEditorInner({ pageId, initialContent, onChange }: Props & { forceEmpty?: boolean }) {
+  const { mutateAsync: uploadBlockImage } = useUploadBlockImageMutation();
   const safeContent = useMemo(
     () => (initialContent ? safeSanitize(initialContent) : undefined),
     [initialContent]
@@ -66,10 +67,10 @@ function BlockEditorInner({ pageId, initialContent, onChange }: Props & { forceE
     {
       schema,
       initialContent: safeContent as any,
-      uploadFile: async (file: File) => uploadBlockImage(pageId, file),
+      uploadFile: async (file: File) => uploadBlockImage({ blockId: pageId, file }),
       tables: { splitCells: true, cellBackgroundColor: true, cellTextColor: true, headers: true },
     },
-    [pageId]
+    [pageId, uploadBlockImage]
   );
 
   function handleChange() {

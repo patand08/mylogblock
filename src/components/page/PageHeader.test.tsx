@@ -12,6 +12,14 @@ vi.mock("@/components/ui/EmojiPickerPopover", () => ({
 vi.mock("@/lib/storageRepo", () => ({
   uploadCoverImage: vi.fn().mockResolvedValue("https://cdn.example.com/cover.jpg"),
 }));
+vi.mock("@/lib/pageQueries", () => ({
+  useUploadCoverImageMutation: () => ({
+    mutateAsync: vi.fn().mockResolvedValue("https://cdn.example.com/cover.jpg"),
+  }),
+}));
+vi.mock("@/components/page/SlugModal", () => ({
+  default: () => null,
+}));
 
 function makePage(overrides: Partial<Page> = {}): Page {
   return {

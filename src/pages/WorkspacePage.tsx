@@ -16,7 +16,7 @@ const PAGE_TRANSITION_MS = 320;
 export default function WorkspacePage() {
   const { pageId } = useParams<{ pageId?: string }>();
   const navigate = useNavigate();
-  const { pages, tree, activePageId, setActivePageId, createPage, updatePage, deletePage, reorderPagesOpt, loading } = useWorkspace();
+  const { pages, tree, activePageId, setActivePageId, createPage, updatePage, deletePage, reorderPagesOpt, loading, error } = useWorkspace();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [deleteTarget, setDeleteTarget] = useState<string | null>(null);
@@ -179,6 +179,11 @@ export default function WorkspacePage() {
       </div>
 
       <main className="flex-1 overflow-hidden">
+        {error && (
+          <div className="mx-4 mt-3 rounded-md border border-red-500/40 bg-red-500/10 px-3 py-2 text-xs text-red-200">
+            {error}
+          </div>
+        )}
         {activePage && isPageTransitioning ? (
           <PageContentSkeleton />
         ) : activePage ? (

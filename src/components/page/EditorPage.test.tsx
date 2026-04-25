@@ -32,6 +32,17 @@ vi.mock("@/lib/storageRepo", () => ({
   uploadCoverImage: vi.fn(),
   uploadBlockImage: vi.fn(),
 }));
+vi.mock("@/lib/pageQueries", () => ({
+  useUploadCoverImageMutation: () => ({
+    mutateAsync: vi.fn().mockResolvedValue("https://cdn.example.com/cover.jpg"),
+  }),
+  useUploadBlockImageMutation: () => ({
+    mutateAsync: vi.fn().mockResolvedValue("https://cdn.example.com/block.jpg"),
+  }),
+}));
+vi.mock("@/components/page/SlugModal", () => ({
+  default: () => null,
+}));
 
 import EditorPage from "./EditorPage";
 

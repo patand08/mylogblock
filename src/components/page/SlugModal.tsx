@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { checkSlugAvailable, setPageSlug } from "@/lib/pageRepo";
+import { useQueryClient } from "@tanstack/react-query";
+import { pageKeys, useSetPageSlugMutation } from "@/lib/pageQueries";
+import { checkSlugAvailable } from "@/lib/pageRepo";
 import { Page } from "@/types";
 import Twemoji from "@/components/ui/Twemoji";
 
@@ -31,6 +33,8 @@ interface Props {
 }
 
 export default function SlugModal({ page, open, onClose, onSaved }: Props) {
+  const queryClient = useQueryClient();
+  const { mutateAsync: persistSlug } = useSetPageSlugMutation();
   const [value, setValue] = useState(page.slug ?? "");
   const [validationError, setValidationError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -64,7 +68,11 @@ export default function SlugModal({ page, open, onClose, onSaved }: Props) {
       setChecking(true);
       checkTimer.current = setTimeout(async () => {
         try {
-          const available = await checkSlugAvailable(cleaned, page.id);
+          const available = await queryClient.fetchQuery({
+            queryKey: pageKeys.slugAvailability(cleaned, page.id),
+            queryFn: () => checkSlugAvailable(cleaned, page.id),
+            staleTime: 15_000,
+          });
           if (!available) setValidationError("This slug is already taken");
         } catch {
           // silent — save will catch DB errors
@@ -84,7 +92,7 @@ export default function SlugModal({ page, open, onClose, onSaved }: Props) {
     if (trimmed === "") {
       setSaving(true);
       try {
-        await setPageSlug(page.id, null);
+        await persistSlug({ pageId: page.id, slug: null });
         onSaved(null);
         onClose();
       } catch (e) {
@@ -105,13 +113,17 @@ export default function SlugModal({ page, open, onClose, onSaved }: Props) {
     setServerError(null);
     try {
       // Final availability check before save (race condition guard)
-      const available = await checkSlugAvailable(trimmed, page.id);
+      const available = await queryClient.fetchQuery({
+        queryKey: pageKeys.slugAvailability(trimmed, page.id),
+        queryFn: () => checkSlugAvailable(trimmed, page.id),
+        staleTime: 0,
+      });
       if (!available) {
         setValidationError("This slug is already taken");
         setSaving(false);
         return;
       }
-      await setPageSlug(page.id, trimmed);
+      await persistSlug({ pageId: page.id, slug: trimmed });
       onSaved(trimmed);
       onClose();
     } catch (e) {
@@ -245,7 +257,7 @@ export default function SlugModal({ page, open, onClose, onSaved }: Props) {
               onClick={async () => {
                 setSaving(true);
                 try {
-                  await setPageSlug(page.id, null);
+                  await persistSlug({ pageId: page.id, slug: null });
                   onSaved(null);
                   onClose();
                 } catch (e) {

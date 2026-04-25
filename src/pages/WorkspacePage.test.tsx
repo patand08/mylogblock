@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, act, within } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { MemoryRouter, Routes, Route } from "react-router-dom";
+import { QueryClientProvider } from "@tanstack/react-query";
 
 vi.mock("@blocknote/react", () => ({
   useCreateBlockNote: vi.fn(() => ({ document: [] })),
@@ -53,20 +54,24 @@ vi.mock("@/lib/pageRepo", () => ({
 import WorkspacePage from "./WorkspacePage";
 import { WorkspaceProvider } from "@/context/WorkspaceContext";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { createTestQueryClient } from "@/test/testQueryClient";
 
 async function renderApp(initialPath = "/") {
+  const queryClient = createTestQueryClient();
   await act(async () => {
     render(
-      <MemoryRouter initialEntries={[initialPath]}>
-        <ThemeProvider>
-          <WorkspaceProvider>
-            <Routes>
-              <Route path="/" element={<WorkspacePage />} />
-              <Route path="/page/:pageId" element={<WorkspacePage />} />
-            </Routes>
-          </WorkspaceProvider>
-        </ThemeProvider>
-      </MemoryRouter>
+      <QueryClientProvider client={queryClient}>
+        <MemoryRouter initialEntries={[initialPath]}>
+          <ThemeProvider>
+            <WorkspaceProvider>
+              <Routes>
+                <Route path="/" element={<WorkspacePage />} />
+                <Route path="/page/:pageId" element={<WorkspacePage />} />
+              </Routes>
+            </WorkspaceProvider>
+          </ThemeProvider>
+        </MemoryRouter>
+      </QueryClientProvider>
     );
   });
 }
@@ -84,8 +89,9 @@ describe("WorkspacePage", () => {
 
   it("shows sidebar with page list", async () => {
     await renderApp();
-    // Now there are 2 page-list elements (sidebar and mobile drawer), so use getAllByTestId
-    expect(screen.getAllByTestId("page-list").length).toBeGreaterThanOrEqual(1);
+    // Now there are 2 page-list elements (sidebar and mobile drawer), so use findAllByTestId
+    const pageLists = await screen.findAllByTestId("page-list");
+    expect(pageLists.length).toBeGreaterThanOrEqual(1);
   });
 
   it("creates a page and shows editor when 'Create first page' clicked", async () => {
@@ -120,7 +126,7 @@ describe("WorkspacePage", () => {
   it("clicking New page in sidebar creates page and shows editor", async () => {
     await renderApp();
     const sidebar = screen.getByTestId("sidebar");
-    const newPageBtn = within(sidebar).getByTestId("new-page-btn");
+    const newPageBtn = await within(sidebar).findByTestId("new-page-btn");
     fireEvent.click(newPageBtn);
     expect(await screen.findByTestId("editor-page")).toBeInTheDocument();
   });

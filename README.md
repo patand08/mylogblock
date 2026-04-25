@@ -71,6 +71,7 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 | -------------- | -------------------------------- |
 | Frontend       | React 18 + TypeScript + Vite 5   |
 | Routing        | React Router v6                  |
+| Server State   | TanStack Query (React Query)     |
 | Editor         | BlockNote 0.47                   |
 | Drag & drop    | dnd-kit                          |
 | Backend        | Supabase (Postgres + Storage)    |
@@ -85,8 +86,9 @@ MyLogBlock is a Notion-inspired workspace where pages contain rich block content
 ## Architecture Highlights
 
 - **Context-based theme** — `ThemeContext` wraps the entire app so toggling theme anywhere (sidebar, mobile header) instantly updates BlockNote's color scheme via CSS variable overrides — no prop drilling
+- **Query-driven server state** — TanStack Query owns page fetching/mutations and cache behavior (`useQuery`/`useMutation`), replacing ad hoc fetch effects for core flows
 - **Shared editor schema** — a single `BlockNoteSchema` instance defines all block types and is reused in both the editable and read-only views
-- **Optimistic page tree** — `WorkspaceContext` holds all page state; mutations update local state immediately and sync to Supabase in the background, reverting on failure
+- **Optimistic page tree** — `WorkspaceContext` now focuses on UI concerns + optimistic interaction state while page data is sourced from Query cache
 - **Block sanitizer** — a custom `sanitizeBlocks` utility migrates legacy table block formats to BlockNote 0.47's `tableContent` structure on load
 - **Error boundary** — wraps BlockNote initialization; if block content is malformed, falls back to a fresh empty editor without crashing
 - **MCP server** — a separate Express/Hono server exposing workspace content as MCP tools, deployed as a Vercel serverless function alongside the frontend
@@ -104,10 +106,12 @@ src/
 │   ├── sidebar/        # Sidebar, SortablePageList, PageTreeItem
 │   └── ui/             # Button, IconButton, InlineInput, ConfirmModal, EmojiPicker
 ├── context/
-│   ├── WorkspaceContext.tsx   # Global page state + Supabase sync
+│   ├── WorkspaceContext.tsx   # UI interaction state + optimistic orchestration
 │   └── ThemeContext.tsx       # Shared dark/light theme state
 ├── lib/
 │   ├── pageRepo.ts     # Supabase page CRUD
+│   ├── pageQueries.ts  # TanStack Query keys + hooks for pages/storage
+│   ├── queryClient.ts  # Shared QueryClient defaults/provider config
 │   ├── storageRepo.ts  # Supabase Storage uploads
 │   ├── sanitizeBlocks.ts  # Block migration utility
 │   ├── page-utils.ts   # Tree building, breadcrumbs (pure functions)
@@ -146,6 +150,12 @@ cp .env.example .env.local
 # fill in VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY
 npm run dev
 ```
+
+### React Query + React Compiler notes
+
+- React Query is configured at app root via `QueryClientProvider` in `src/main.tsx`.
+- Query keys and hooks live in `src/lib/pageQueries.ts`.
+- React Compiler is enabled through Vite Babel plugin configuration; on React 18 this project also uses `react-compiler-runtime` with compiler target set to `"18"`.
 
 ### Supabase Schema
 

@@ -3,7 +3,7 @@ import { Page, UpdatePageInput } from "@/types";
 import Breadcrumb from "./Breadcrumb";
 import SlugModal from "./SlugModal";
 import EmojiPickerPopover from "@/components/ui/EmojiPickerPopover";
-import { uploadCoverImage } from "@/lib/storageRepo";
+import { useUploadCoverImageMutation } from "@/lib/pageQueries";
 import clsx from "clsx";
 
 interface Props {
@@ -14,6 +14,7 @@ interface Props {
 }
 
 export default function PageHeader({ page, crumbs, onNavigate, onUpdate }: Props) {
+  const { mutateAsync: uploadCoverImage } = useUploadCoverImageMutation();
   const [editingTitle, setEditingTitle] = useState(false);
   const [titleValue, setTitleValue] = useState(page.title);
   const [slugModalOpen, setSlugModalOpen] = useState(false);
@@ -35,7 +36,7 @@ export default function PageHeader({ page, crumbs, onNavigate, onUpdate }: Props
     if (!file) return;
     e.target.value = "";
     try {
-      const url = await uploadCoverImage(page.id, file);
+      const url = await uploadCoverImage({ pageId: page.id, file });
       onUpdate(page.id, { cover_image_url: url });
     } catch {
       // silent — add toast later
