@@ -188,6 +188,7 @@ export default function WorkspacePage() {
           <PageContentSkeleton />
         ) : activePage ? (
           <EditorPage
+            key={activePage.id}
             page={activePage}
             allPages={pages}
             onNavigate={handleSelectPage}

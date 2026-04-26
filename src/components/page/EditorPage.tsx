@@ -1,4 +1,4 @@
-import { useRef, useCallback } from "react";
+import { useRef, useCallback, useEffect } from "react";
 import { Page, UpdatePageInput } from "@/types";
 import { getPageBreadcrumbs } from "@/lib/page-utils";
 import PageHeader from "./PageHeader";
@@ -28,6 +28,15 @@ const SAVE_DEBOUNCE_MS = 800;
 export default function EditorPage({ page, allPages, onNavigate, onUpdatePage }: Props) {
   const crumbs = getPageBreadcrumbs(allPages, page.id);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (saveTimer.current) {
+        clearTimeout(saveTimer.current);
+        saveTimer.current = null;
+      }
+    };
+  }, [page.id]);
 
   const handleBlocksChange = useCallback((blocks: PartialBlock[]) => {
     if (saveTimer.current) clearTimeout(saveTimer.current);

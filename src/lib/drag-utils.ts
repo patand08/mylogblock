@@ -55,6 +55,11 @@ export function reorderPages(
     targetParentId = parent?.parent_id ?? null;
   }
 
+  // Prevent cycles that can make entire branches disappear from the visible root tree.
+  // This can happen when dropping a parent onto one of its descendants in same-level mode.
+  if (targetParentId === active.id) return pages;
+  if (targetParentId && isDescendant(byId, targetParentId, active.id)) return pages;
+
   let nextPages = pages.map((p) =>
     p.id === active.id ? { ...p, parent_id: targetParentId } : p
   );

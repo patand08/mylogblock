@@ -72,4 +72,14 @@ describe("reorderPages", () => {
     const moved = result.find((p) => p.id === "child-a")!;
     expect(moved.parent_id).toBeNull();
   });
+
+  it("prevents creating a cycle when dropping parent onto descendant", () => {
+    const pages = [
+      makePage("root", null, 0),
+      makePage("child", "root", 0),
+      makePage("grandchild", "child", 0),
+    ];
+    const result = reorderPages(pages, "root", "grandchild", 0);
+    expect(result).toEqual(pages);
+  });
 });
