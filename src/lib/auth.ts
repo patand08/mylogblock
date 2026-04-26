@@ -1,19 +1,41 @@
-const SESSION_KEY = "vs_authed";
+type AuthResponse = { authenticated?: boolean };
 
-export function verifyPassword(input: string): boolean {
-  const expected = import.meta.env.VITE_ACCESS_CODE as string;
-  if (!expected) return true; // no code set → open (dev convenience)
-  return input === expected;
+async function readAuthResponse(res: Response): Promise<AuthResponse | null> {
+  const contentType = res.headers.get("content-type") ?? "";
+  if (!contentType.includes("application/json")) return null;
+
+  try {
+    return (await res.json()) as AuthResponse;
+  } catch {
+    return null;
+  }
 }
 
-export function isAuthenticated(): boolean {
-  return sessionStorage.getItem(SESSION_KEY) === "1";
+export async function verifyPassword(input: string): Promise<boolean> {
+  const res = await fetch("/api/auth", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    credentials: "include",
+    body: JSON.stringify({ code: input }),
+  });
+  if (!res.ok) return false;
+  const body = await readAuthResponse(res);
+  return body?.authenticated === true;
 }
 
-export function setAuthenticated(): void {
-  sessionStorage.setItem(SESSION_KEY, "1");
+export async function isAuthenticated(): Promise<boolean> {
+  const res = await fetch("/api/auth", {
+    method: "GET",
+    credentials: "include",
+  });
+  if (!res.ok) return false;
+  const body = await readAuthResponse(res);
+  return body?.authenticated === true;
 }
 
-export function clearAuth(): void {
-  sessionStorage.removeItem(SESSION_KEY);
+export async function clearAuth(): Promise<void> {
+  await fetch("/api/auth", {
+    method: "DELETE",
+    credentials: "include",
+  });
 }

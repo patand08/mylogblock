@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { WorkspaceProvider } from "@/context/WorkspaceContext";
 import { ThemeProvider } from "@/context/ThemeContext";
@@ -9,7 +9,26 @@ import LockScreen from "@/components/auth/LockScreen";
 import { isAuthenticated } from "@/lib/auth";
 
 function WorkspaceApp() {
-  const [authed, setAuthed] = useState(isAuthenticated());
+  const [authed, setAuthed] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    isAuthenticated()
+      .then((ok) => {
+        if (mounted) setAuthed(ok);
+      })
+      .finally(() => {
+        if (mounted) setCheckingAuth(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (checkingAuth) {
+    return null;
+  }
 
   if (!authed) {
     return <LockScreen onUnlock={() => setAuthed(true)} />;
@@ -26,7 +45,24 @@ function WorkspaceApp() {
 }
 
 function PageRoute() {
-  const authed = isAuthenticated();
+  const [authed, setAuthed] = useState(false);
+  const [checkingAuth, setCheckingAuth] = useState(true);
+
+  useEffect(() => {
+    let mounted = true;
+    isAuthenticated()
+      .then((ok) => {
+        if (mounted) setAuthed(ok);
+      })
+      .finally(() => {
+        if (mounted) setCheckingAuth(false);
+      });
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  if (checkingAuth) return null;
 
   if (authed) {
     return (

@@ -1,5 +1,5 @@
 import { useState, useRef } from "react";
-import { verifyPassword, setAuthenticated } from "@/lib/auth";
+import { verifyPassword } from "@/lib/auth";
 
 interface Props {
   onUnlock: () => void;
@@ -21,7 +21,6 @@ export default function LockScreen({ onUnlock }: Props) {
     setLoading(false);
 
     if (ok) {
-      setAuthenticated();
       onUnlock();
     } else {
       setError(true);

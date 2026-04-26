@@ -189,7 +189,7 @@ create trigger pages_updated_at
 -- Storage bucket
 insert into storage.buckets (id, name, public) values ('mylogblock', 'mylogblock', true);
 
--- RLS (single-user workspace — anon access)
+-- RLS (development-only example; do NOT use in production)
 alter table pages enable row level security;
 create policy "anon read"   on pages for select using (true);
 create policy "anon insert" on pages for insert with check (true);
@@ -220,7 +220,7 @@ npm run lint          # ESLint
 
 1. Push to GitHub
 2. Import the repo in [Vercel](https://vercel.com)
-3. Add environment variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, and optionally `VITE_ACCESS_CODE`
+3. Add environment variables: `VITE_SUPABASE_URL`, `VITE_SUPABASE_ANON_KEY`, `ACCESS_CODE`, `AUTH_SESSION_SECRET`
 4. Deploy — `vercel.json` SPA rewrite is already configured
 
 ---

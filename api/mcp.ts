@@ -20,6 +20,11 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
 
   // POST for MCP streaming protocol
   if (method === "POST") {
+    if (!MCP_API_KEY) {
+      res.status(500).json({ error: "Server misconfigured: missing MCP_API_KEY" });
+      return;
+    }
+
     // Auth check
     if (!checkApiKey(req.headers.authorization, MCP_API_KEY)) {
       res.status(401).json({ error: "Unauthorized" });
