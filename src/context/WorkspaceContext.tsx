@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useRef, ReactNode } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { Page, CreatePageInput, UpdatePageInput } from "@/types";
 import { createPageObject, applyPageUpdate, buildPageTree, PageTreeNode } from "@/lib/page-utils";
@@ -42,6 +42,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
 
   const [activePageId, setActivePageId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const pendingLocalUpdates = useRef(new Map<string, UpdatePageInput>());
 
   const workspaceKey = pageKeys.workspace(WORKSPACE_ID);
 
@@ -52,6 +53,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     const siblings = pages.filter((p) => p.parent_id === (input.parent_id ?? null) && !p.is_deleted);
     const maxOrder = siblings.reduce((m, p) => Math.max(m, p.order_index), -1);
     const local = createPageObject(input, WORKSPACE_ID, maxOrder + 1);
+    pendingLocalUpdates.current.set(local.id, {});
     const previousPages = queryClient.getQueryData<Page[]>(workspaceKey) ?? [];
     queryClient.setQueryData<Page[]>(workspaceKey, [...previousPages, local]);
 
@@ -60,15 +62,29 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       { ...input, workspace_id: WORKSPACE_ID, order_index: maxOrder + 1 },
       {
         onSuccess: (saved) => {
+          const pendingUpdates = pendingLocalUpdates.current.get(local.id) ?? {};
+          pendingLocalUpdates.current.delete(local.id);
+          const savedWithPendingUpdates = applyPageUpdate(saved, pendingUpdates);
           queryClient.setQueryData<Page[]>(
             workspaceKey,
-            (prev = []) => prev.map((p) => (p.id === local.id ? saved : p))
+            (prev = []) => prev.map((p) => (p.id === local.id ? savedWithPendingUpdates : p))
           );
           setActivePageId((prev) => (prev === local.id ? saved.id : prev));
-          onPersisted?.(saved, local.id);
+          if (Object.keys(pendingUpdates).length > 0) {
+            updatePageMutation.mutate(
+              { id: saved.id, updates: pendingUpdates },
+              {
+                onError: (e: unknown) => {
+                  setError(e instanceof Error ? e.message : "Failed to update page");
+                },
+              }
+            );
+          }
+          onPersisted?.(savedWithPendingUpdates, local.id);
           setError(null);
         },
         onError: (e: unknown) => {
+          pendingLocalUpdates.current.delete(local.id);
           queryClient.setQueryData<Page[]>(
             workspaceKey,
             (prev = []) => prev.filter((p) => p.id !== local.id)
@@ -78,7 +94,7 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       }
     );
     return local;
-  }, [createPageMutation, pages, queryClient, workspaceKey]);
+  }, [createPageMutation, pages, queryClient, updatePageMutation, workspaceKey]);
 
   const updatePage = useCallback((id: string, updates: UpdatePageInput): void => {
     const previousPages = queryClient.getQueryData<Page[]>(workspaceKey) ?? [];
@@ -86,6 +102,13 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       workspaceKey,
       previousPages.map((p) => (p.id === id ? applyPageUpdate(p, updates) : p))
     );
+    if (pendingLocalUpdates.current.has(id)) {
+      pendingLocalUpdates.current.set(id, {
+        ...pendingLocalUpdates.current.get(id),
+        ...updates,
+      });
+      return;
+    }
     updatePageMutation.mutate(
       { id, updates },
       {
@@ -118,7 +141,21 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     queryClient.setQueryData<Page[]>(workspaceKey, reordered);
     const updates = reordered
       .filter((p) => !p.is_deleted)
+      .filter((p) => {
+        const previous = previousPages.find((prev) => prev.id === p.id);
+        const changed = previous && (previous.order_index !== p.order_index || previous.parent_id !== p.parent_id);
+        if (changed && pendingLocalUpdates.current.has(p.id)) {
+          pendingLocalUpdates.current.set(p.id, {
+            ...pendingLocalUpdates.current.get(p.id),
+            order_index: p.order_index,
+            parent_id: p.parent_id,
+          });
+          return false;
+        }
+        return changed;
+      })
       .map((p) => ({ id: p.id, order_index: p.order_index, parent_id: p.parent_id }));
+    if (updates.length === 0) return;
     reorderPagesMutation.mutate(updates, {
       onError: (e: unknown) => {
         queryClient.setQueryData<Page[]>(workspaceKey, previousPages);

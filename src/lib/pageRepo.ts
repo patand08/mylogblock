@@ -93,7 +93,9 @@ export async function reorderPagesInDb(pages: Array<{ id: string; order_index: n
     const { error } = await supabase
       .from("pages")
       .update({ order_index: p.order_index, parent_id: p.parent_id })
-      .eq("id", p.id);
+      .eq("id", p.id)
+      .select("id")
+      .single();
     if (error) throw new Error(error.message);
   }
 }
